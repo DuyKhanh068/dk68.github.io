@@ -102,7 +102,7 @@ tick();
 
 function TikTok() {
     setTimeout(function() {
-            window.open('https://www.tiktok.com', 'ultimate')
+            window.open('https://www.tiktok.com/@duy.khanh98', 'ultimate')
         },
         100);
 }
@@ -123,7 +123,7 @@ function Instagram() {
 
 function Telegram() {
     setTimeout(function() {
-            window.open('https://t.me/', 'ultimate')
+            window.open('https://zalo.me/0393735056', 'ultimate')
         },
         100);
 }
