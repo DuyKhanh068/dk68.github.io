@@ -116,14 +116,14 @@ function Facebook() {
 
 function Instagram() {
     setTimeout(function() {
-            window.open('https://github.com/', 'ultimate')
+            window.open('https://github.com/DuyKhanh068', 'ultimate')
         },
         100);
 }
 
 function Telegram() {
     setTimeout(function() {
-            window.open('https://zalo.me/0393735056', 'ultimate')
+            window.open('https://youtube.com/@DuyyKhanh68', 'ultimate')
         },
         100);
 }
