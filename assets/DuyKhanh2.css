@@ -160,8 +160,8 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 .Telegram {
-    background: rgb(29, 160, 242);
-    background: linear-gradient(139deg, rgba(0, 255, 255, 1) 41%, rgba(0, 255, 240, 1) 75%)
+    background: rgb(0, 104, 255);
+    background: linear-gradient(139deg, rgba(0, 104, 255, 1) 0%, rgba(0, 199, 255, 1) 100%)
 }
 
 .ThongTinThanhToan {
