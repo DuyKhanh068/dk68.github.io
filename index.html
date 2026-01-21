@@ -61,11 +61,21 @@
 <body class="Border" onLoad="onCreate()">
 
     <div id="background-layer"></div> <div class="overlay-dim"></div>   <div class="BlurWebs">
-        <div class="Topnav">
-            <a class="Active">HOME</a>
-            <a style="color:cyan;">
-                <span id="fps">144.0</span> FPS</a>
-        </div>
+       <div class="Topnav">
+    <a class="Active">HOME</a>
+    
+    <a style="color:cyan;">
+        <span id="fps">144.0</span> FPS
+    </a>
+
+    <a style="float: right; color: #f1c40f; cursor: default; min-width: 160px; text-align: right; transition: all 0.5s;">
+    <i class="fas fa-temperature-high"></i> 
+    
+    <span id="weather_loc" style="color: #00FFFF; margin-right: 5px;">...</span>: 
+    
+    <span id="weather_temp" style="display: inline-block; min-width: 80px; transition: opacity 0.3s;">--</span>
+</a>
+</div>
         
         </div>
         <br>
@@ -76,7 +86,7 @@
             Duy Khánh <i class="fa fa-check-circle"></i></h2>
         <h2 class="TieuSu">                                <span class="contentLetter"></span>             </h2>
         <br>
-        <strong style="color: rgb(255, 238, 0); font-size: 19px; font-family: 'Rowdies';">You Info: <a id="checkip_address">Loading your address....</a>
+        <strong style="color: rgb(255, 238, 0); font-size: 19px; font-family: 'Rowdies';">Your Info <a id="checkip_address">Loading your address....</a>
           <br/>
           </strong>
         <strong  style="color: rgb(255, 0, 0); font-size: 20px; font-family: 'Rowdies';">Date Created:</strong>
@@ -300,41 +310,6 @@
     </div>
 
     <audio id="myAudio"></audio>
-    <script>
-    // CẤU HÌNH: Điền các SỐ THỨ TỰ bài hát bạn muốn random vào trong ngoặc vuông []
-    // Ở đây mình đã điền sẵn 2, 3, 4. Bạn có thể thêm bớt tùy ý (ví dụ: [2, 4, 6, 8])
-    const songList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]; 
-
-    function getRandomAudio() {
-        // Lấy ngẫu nhiên một số từ danh sách songList ở trên
-        const randomIndex = Math.floor(Math.random() * songList.length);
-        const songId = songList[randomIndex]; // Kết quả sẽ là 2, 3 hoặc 4
-        
-        return 'music/' + songId + '.mp3';
-    }
-
-    function playMusic() {
-        var audio = document.getElementById("myAudio");
-        
-        // Lấy link nhạc random
-        audio.src = getRandomAudio();
-        
-        // Xử lý lỗi nếu trình duyệt chặn tự phát
-        audio.play().catch(error => {
-            console.log("Phát nhạc thất bại (có thể do trình duyệt chặn): " + error);
-        });
-        
-        // Tự động chuyển bài khi hết bài
-        audio.onended = function() {
-            playMusic();
-        };
-    }
-
-    function hideNotification() {
-        document.getElementById("notification").style.display = "none";
-        playMusic();
-    }
-</script>
 </body>
 
     <div id="Toast">Designed by DuyKhanh :))</div>
