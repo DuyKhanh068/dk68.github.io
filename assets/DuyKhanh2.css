@@ -94,74 +94,64 @@ body {
     transition: 0.5s
 }
 
-.TikTok {
-  position: relative;
-  background: rgb(221,105,105);
-  background: linear-gradient(138deg, 
-    rgba(221,105,105,1) 0%, 
-    rgba(222,94,94,1) 21%, 
-    rgba(223,86,86,1) 37%, 
-    rgba(223,86,86,1) 46%, 
-    rgba(235,49,43,1) 66%);
-    color: var(--accentColor);
-    border: solid var(--accentColor) 2px;
+/* 1. Tạo hiệu ứng chuyển động cho màu nền */
+@keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* 2. Cấu hình chung cho các nút (đỡ phải viết lại nhiều lần) */
+.TikTok, .Facebook, .Instagram, .Telegram {
+    position: relative;
     border-radius: 10px;
     font-size: 1rem;
     text-align: center;
     display: block;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    padding: 10px; /* 17px */
+    margin: 10px; /* Gom gọn margin */
+    padding: 10px;
     text-decoration: none;
-    /* transition: all .25s cubic-bezier(.08, .59, .29, .99); */
     -webkit-tap-highlight-color: transparent;
+    
+    /* Màu chữ nên là màu trắng để nổi bật trên nền màu đậm */
+    color: #ffffff !important; 
+    font-weight: bold;
+    
+    /* Kích thước nền lớn hơn để tạo hiệu ứng trôi */
+    background-size: 200% 200%;
+    /* Thời gian chuyển màu: 3 giây, lặp lại vô hạn */
+    animation: gradientAnimation 3s ease infinite;
+    
+    /* Border nhẹ cho đẹp (tùy chọn) */
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+/* ---------------------------------------------------- */
+/* 3. Màu sắc riêng cho từng thương hiệu */
+/* ---------------------------------------------------- */
+
+/* TIKTOK: Màu Đen pha chút hiệu ứng Glitch (Xanh Cyan + Đỏ Hồng) */
+.TikTok {
+    background-image: linear-gradient(45deg, #000000, #25F4EE, #FE2C55, #000000);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* FACEBOOK: Các sắc thái màu Xanh dương chuẩn Meta */
 .Facebook { 
-  position: relative;
-  background: rgb(88,101,242); 
-  background: linear-gradient(139deg, 
-    rgb(73, 89, 255) 50%,
-    rgba(0, 198, 255, 0.84) 100%);
-  color: var(--accentColor);
-  border: solid var(--accentColor) 2px;
-  border-radius: 10px;
-  font-size: 1rem;
-  text-align: center;
-  display: block;
-  margin-left: 10px;
-  margin-right: 10px;
-  margin-bottom: 10px;
-  padding: 10px; /* 17px */
-  text-decoration: none;
-  /* transition: all .25s cubic-bezier(.08, .59, .29, .99); */
-  -webkit-tap-highlight-color: transparent;
+    background-image: linear-gradient(45deg, #1877F2, #3b5998, #00C6FF);
+    box-shadow: 0 4px 15px rgba(24, 119, 242, 0.3);
 }
+
+/* GITHUB (Class cũ là .Instagram): Tông màu Đen - Xám đậm - Tím nhạt */
 .Instagram {
- position: relative;
-  background: rgb(255, 255, 255); 
-  background: linear-gradient(90deg, 
-    rgb(3, 3, 4) 0%, 
-    rgb(0, 0, 0) 50%, 
-    rgb(0, 0, 0) 100%);
-  color: var(--accentColor);
-  border: solid var(--accentColor) 2px;
-  border-radius: 10px;
-  font-size: 1rem;
-  text-align: center;
-  display: block;
-  margin-left: 10px;
-  margin-right: 10px;
-  margin-bottom: 10px;
-  padding: 10px; /* 17px */
-  text-decoration: none;
-  /* transition: all .25s cubic-bezier(.08, .59, .29, .99); */
-  -webkit-tap-highlight-color: transparent;
+    background-image: linear-gradient(45deg, #161b22, #24292e, #414b56, #6e5494);
+    box-shadow: 0 4px 15px rgba(36, 41, 46, 0.3);
 }
+
+/* YOUTUBE (Class cũ là .Telegram): Tông màu Đỏ tươi - Đỏ đậm */
 .Telegram {
-    background: rgb(29, 160, 242);
-    background: linear-gradient(139deg, rgba(0, 255, 255, 1) 41%, rgba(0, 255, 240, 1) 75%)
+    background-image: linear-gradient(45deg, #FF0000, #c4302b, #ff4b4b);
+    box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
 }
 
 .ThongTinThanhToan {
