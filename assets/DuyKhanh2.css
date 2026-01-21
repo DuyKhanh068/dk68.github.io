@@ -96,26 +96,30 @@ body {
 
 .TikTok {
   position: relative;
-  background: rgb(221,105,105);
-  background: linear-gradient(138deg, 
-    rgba(221,105,105,1) 0%, 
-    rgba(222,94,94,1) 21%, 
-    rgba(223,86,86,1) 37%, 
-    rgba(223,86,86,1) 46%, 
-    rgba(235,49,43,1) 66%);
-    color: var(--accentColor);
-    border: solid var(--accentColor) 2px;
-    border-radius: 10px;
-    font-size: 1rem;
-    text-align: center;
-    display: block;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    padding: 10px; /* 17px */
-    text-decoration: none;
-    /* transition: all .25s cubic-bezier(.08, .59, .29, .99); */
-    -webkit-tap-highlight-color: transparent;
+  
+  /* Nền đen chủ đạo chuyển sang xám đen nhẹ */
+  background: rgb(0, 0, 0);
+  background: linear-gradient(138deg, rgba(0,0,0,1) 30%, rgba(28,28,28,1) 100%);
+  
+  /* Màu chữ trắng để nổi bật trên nền đen */
+  color: #ffffff;
+  
+  /* Viền màu Đỏ TikTok (#FE2C55) tạo điểm nhấn */
+  border: solid #FE2C55 2px;
+  
+  /* Các thuộc tính định dạng khung giữ nguyên */
+  border-radius: 10px;
+  font-size: 1rem;
+  text-align: center;
+  display: block;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  text-decoration: none;
+  
+  /* Tắt highlight mặc định khi bấm trên mobile */
+  -webkit-tap-highlight-color: transparent;
 }
 
 .Facebook { 
