@@ -138,21 +138,21 @@
             <hr class="New"><br>
             <!-- ===== Thông Tin Thanh Toán - Có Thể Thêm Đoạn Văn Bản Giới Thiệu Ngắn Về Bản Thân  <button> <i class="fa fa-clone"></button> ===== -->
             <div class="NameFtDuyKhanh">
-                <h2>Mobile Banks</h2>
+                <h2>DV MXH</h2>
             </div>
             <div class="ThongTinThanhToan">
-                <p class="ThongTinThanhToanTitle">MBBANK</p>
-                <p class="ThongTinThanhToanText">STK: 6666682006|| CTK TRAN KHANH DUY</p>
-            </div>
-            <br>
-            <div class="ThongTinThanhToan">
-                <p class="ThongTinThanhToanTitle">Momo Bank</p>
-                <p class="ThongTinThanhToanText">STK 0393735056 || CTK TRAN KHANH DUY</p>
+                <p class="ThongTinThanhToanTitle">HOÀN TIỀN CHPLAY, APPSTORE</p>
+                <p class="ThongTinThanhToanText">Hỗ trợ hoàn tiền giao dịch tự động siêu nhanh, tỷ lệ thành công cao</p>
             </div>
             <br>
             <div class="ThongTinThanhToan">
-                <p class="ThongTinThanhToanTitle">UY TÍN</p>
-                <p class="ThongTinThanhToanText">TẠO NÊN THƯƠNG HIỆU </p>
+                <p class="ThongTinThanhToanTitle">TĂNG TƯƠNG TÁC MXH</p>
+                <p class="ThongTinThanhToanText">Tăng tương tác toàn diện cho mọi nền tảng MXH</p>
+            </div>
+            <br>
+            <div class="ThongTinThanhToan">
+                <p class="ThongTinThanhToanTitle">CRACK WINDOW</p>
+                <p class="ThongTinThanhToanText">Active Win,Office,...vv</p>
             </div>
             <br>
             <br>
@@ -301,27 +301,40 @@
 
     <audio id="myAudio"></audio>
     <script>
-        const audioFiles = [
-            'music/1.mp3',
-            'music/2.mp3'
-        ];
+    // CẤU HÌNH: Điền các SỐ THỨ TỰ bài hát bạn muốn random vào trong ngoặc vuông []
+    // Ở đây mình đã điền sẵn 2, 3, 4. Bạn có thể thêm bớt tùy ý (ví dụ: [2, 4, 6, 8])
+    const songList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]; 
 
-        function getRandomAudio() {
-            const randomIndex = Math.floor(Math.random() * audioFiles.length);
-            return audioFiles[randomIndex];
-        }
+    function getRandomAudio() {
+        // Lấy ngẫu nhiên một số từ danh sách songList ở trên
+        const randomIndex = Math.floor(Math.random() * songList.length);
+        const songId = songList[randomIndex]; // Kết quả sẽ là 2, 3 hoặc 4
+        
+        return 'music/' + songId + '.mp3';
+    }
 
-        function playMusic() {
-            const audio = document.getElementById("myAudio");
-            audio.src = getRandomAudio();
-            audio.play();
-        }
-
-        function hideNotification() {
-            document.getElementById("notification").style.display = "none";
+    function playMusic() {
+        var audio = document.getElementById("myAudio");
+        
+        // Lấy link nhạc random
+        audio.src = getRandomAudio();
+        
+        // Xử lý lỗi nếu trình duyệt chặn tự phát
+        audio.play().catch(error => {
+            console.log("Phát nhạc thất bại (có thể do trình duyệt chặn): " + error);
+        });
+        
+        // Tự động chuyển bài khi hết bài
+        audio.onended = function() {
             playMusic();
-        }
-    </script>
+        };
+    }
+
+    function hideNotification() {
+        document.getElementById("notification").style.display = "none";
+        playMusic();
+    }
+</script>
 </body>
 
     <div id="Toast">Designed by DuyKhanh :))</div>
