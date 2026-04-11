@@ -1,5 +1,5 @@
 /* ================================================
-   MAIN.JS - TỐI ƯU TOÀN BỘ CHỨC NĂNG
+   MAIN.JS - GSAP + ASYNC/AWAIT REFACTOR + PARALLAX
    ================================================ */
 
 // -------------------- KHỞI TẠO --------------------
@@ -96,7 +96,7 @@ function hideNotification() {
     playMusic();
 }
 
-// -------------------- DATE CREATED (time‑activated) --------------------
+// -------------------- DATE CREATED --------------------
 function updateDateCreated() {
     const momk = document.getElementById("momk");
     if (!momk) return;
@@ -113,12 +113,12 @@ function updateDateCreated() {
 }
 updateDateCreated();
 
-// -------------------- IP & WEATHER (tích hợp) --------------------
+// -------------------- IP & WEATHER (ASYNC/AWAIT REFACTOR) --------------------
 let ipData = {
     ip: "Checking...", isp: "Checking...", location: "Checking...",
     city: "Checking...", lat: null, lon: null, ready: false
 };
-let ipViewState = 0; // 0:IP, 1:ISP, 2:Location
+let ipViewState = 0;
 
 function normalizeISP(isp) {
     if (!isp || isp === "Unknown ISP" || isp === "Network Hidden") return "Unknown ISP";
@@ -137,7 +137,8 @@ function isValidIP(ip) {
     });
 }
 
-async function checkip_address() {
+// Sử dụng Promise.any để lấy nguồn nhanh nhất (async/await triệt để)
+async function fetchIPData() {
     const sources = [
         {
             name: "ipinfo.io",
@@ -187,36 +188,43 @@ async function checkip_address() {
         }
     ];
 
-    for (const src of sources) {
-        try {
-            const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 4000);
-            const res = await fetch(src.url, { signal: controller.signal });
-            clearTimeout(timeout);
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            const data = await res.json();
-            const parsed = src.parse(data);
-            parsed.isp = normalizeISP(parsed.isp);
-            ipData = { ...ipData, ...parsed, ready: true };
-            rotateIPInfo();
-            updateWeatherData(parsed.lat, parsed.lon, parsed.city);
-            return;
-        } catch (e) {
-            console.warn(`${src.name} failed:`, e.message);
-        }
+    const fetchPromises = sources.map(src => 
+        fetch(src.url, { signal: AbortSignal.timeout(4000) })
+            .then(res => res.ok ? res.json() : Promise.reject(`HTTP ${res.status}`))
+            .then(data => {
+                const parsed = src.parse(data);
+                parsed.isp = normalizeISP(parsed.isp);
+                return parsed;
+            })
+            .catch(err => {
+                console.warn(`${src.name} failed:`, err);
+                throw err; // để Promise.any bỏ qua
+            })
+    );
+
+    try {
+        const result = await Promise.any(fetchPromises);
+        ipData = { ...ipData, ...result, ready: true };
+        rotateIPInfo();
+        updateWeatherData(result.lat, result.lon, result.city);
+    } catch (e) {
+        console.warn("All IP sources failed, using fallback");
+        ipData = {
+            ip: `192.168.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`,
+            isp: "Local Network",
+            city: "Local",
+            location: "Local Network",
+            lat: 21.0285,
+            lon: 105.8542,
+            ready: true
+        };
+        rotateIPInfo();
+        updateWeatherData(21.0285, 105.8542, "Hanoi");
     }
-    // Fallback
-    ipData = {
-        ip: `192.168.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`,
-        isp: "Local Network",
-        city: "Local",
-        location: "Local Network",
-        lat: 21.0285,
-        lon: 105.8542,
-        ready: true
-    };
-    rotateIPInfo();
-    updateWeatherData(21.0285, 105.8542, "Hanoi");
+}
+
+async function checkip_address() {
+    await fetchIPData();
 }
 
 function rotateIPInfo() {
@@ -250,7 +258,7 @@ function rotateIPInfo() {
     }, 300);
 }
 
-// Weather
+// Weather (async/await rõ ràng)
 let wData = { city: "Loading...", temp: "--", rain_mm: 0, rain_prob: 0, aqi: "--", ready: false };
 let viewState = 0;
 
@@ -263,9 +271,13 @@ async function updateWeatherData(customLat, customLon, customCity) {
     if (locEl) locEl.textContent = city;
 
     try {
-        const wRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,precipitation&hourly=precipitation_probability&timezone=auto`);
-        if (wRes.ok) {
-            const wJson = await wRes.json();
+        const [wRes, aqiRes] = await Promise.allSettled([
+            fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,precipitation&hourly=precipitation_probability&timezone=auto`),
+            fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=us_aqi`)
+        ]);
+
+        if (wRes.status === 'fulfilled' && wRes.value.ok) {
+            const wJson = await wRes.value.json();
             if (wJson.current) {
                 wData.temp = Math.round(wJson.current.temperature_2m);
                 wData.rain_mm = wJson.current.precipitation || 0;
@@ -275,15 +287,14 @@ async function updateWeatherData(customLat, customLon, customCity) {
                 }
             }
         }
-    } catch (e) { console.warn("Weather fetch error:", e); }
 
-    try {
-        const aqiRes = await fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=us_aqi`);
-        if (aqiRes.ok) {
-            const aqiJson = await aqiRes.json();
+        if (aqiRes.status === 'fulfilled' && aqiRes.value.ok) {
+            const aqiJson = await aqiRes.value.json();
             if (aqiJson.current?.us_aqi !== undefined) wData.aqi = aqiJson.current.us_aqi;
         }
-    } catch (e) { console.warn("AQI fetch error:", e); }
+    } catch (e) {
+        console.warn("Weather/AQI fetch error:", e);
+    }
 
     wData.ready = true;
     if (!window.weatherInitialized) {
@@ -331,34 +342,63 @@ function rotateView() {
     }, 300);
 }
 
-// -------------------- SKILL BARS ANIMATION (jQuery) --------------------
-$(document).ready(function(){
-    $('.skill-per').each(function() {
-        const $this = $(this);
-        const per = $this.attr('per');
-        $({ val: 0 }).animate({ val: per }, {
-            duration: 3000,
-            step: function(now) {
-                $this.css("width", Math.floor(now) + '%');
-                $this.attr('per', Math.floor(now) + '%');
-            },
-            complete: function() {
-                $this.css("width", per + '%');
-                $this.attr('per', per + '%');
+// -------------------- GSAP SKILL BARS (thay thế jQuery) --------------------
+function animateSkillBars() {
+    gsap.utils.toArray(".skill-per").forEach(bar => {
+        const targetWidth = bar.getAttribute("per") + "%";
+        gsap.fromTo(bar, 
+            { width: "0%" },
+            { 
+                width: targetWidth, 
+                duration: 2, 
+                ease: "power2.out",
+                onUpdate: function() {
+                    const currentWidth = Math.round(this.targets()[0].style.width.replace('%', ''));
+                    bar.setAttribute("per", currentWidth + "%");
+                },
+                scrollTrigger: {
+                    trigger: bar,
+                    start: "top 80%",
+                    toggleActions: "play none none none"
+                }
             }
-        });
+        );
     });
-});
+}
 
-// -------------------- INTERVALS & LISTENERS --------------------
+// -------------------- PARALLAX EFFECT (GSAP ScrollTrigger) --------------------
+function initParallax() {
+    gsap.to("#background-layer", {
+        y: "30%",      // di chuyển chậm hơn nội dung
+        ease: "none",
+        scrollTrigger: {
+            trigger: "body",
+            start: "top top",
+            end: "bottom top",
+            scrub: 1
+        }
+    });
+}
+
+// -------------------- KHỞI TẠO KHI DOM SẴN SÀNG --------------------
 document.addEventListener('DOMContentLoaded', () => {
+    // Đăng ký ScrollTrigger
+    gsap.registerPlugin(ScrollTrigger);
+    
+    // Kích hoạt animation skill bars (có ScrollTrigger)
+    animateSkillBars();
+    
+    // Kích hoạt parallax
+    initParallax();
+    
+    // Các interval
     setInterval(rotateIPInfo, 4000);
     setInterval(rotateView, 4000);
     setInterval(() => { if (ipData.ready) updateWeatherData(); }, 600000);
     setInterval(() => { if (ipData.ready && ipData.ip.startsWith("192.168.")) checkip_address(); }, 300000);
 });
 
-// Refresh thủ công khi click vào IP
+// Refresh IP thủ công
 document.addEventListener('click', (e) => {
     if (e.target.closest('#checkip_address')) {
         ipData.ready = false;
