@@ -12,11 +12,17 @@
     user-select: none;
 }
 
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: black;
+}
+
 body {
     position: relative;
     scroll-behavior: smooth;
     font-family: 'ZCOOL QingKe HuangYou', sans-serif;
-    background: black;
 }
 
 /* ==================== BACKGROUND FIXED LAYERS ==================== */
@@ -47,22 +53,29 @@ body {
     position: relative;
     z-index: 1;
     animation: blur 3s linear forwards;
+    /* Flexbox để giãn phần nội dung chính */
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 /* ==================== BORDER & SCROLLBAR ==================== */
 .Border {
     font-size: 12px;
     position: relative;
-    min-height: 100%;
+    /* Cập nhật chiều cao linh hoạt cho mobile */
+    min-height: calc(100dvh - 16px);
     box-sizing: border-box;
-    padding-bottom: 80px;
+    padding-bottom: 30px;
     background-color: black;
     text-align: center;
-    padding: 0;
     margin: 8px;
     border: 2px double #ccc;
     border-radius: 10px;
     animation: bodyborder 5s infinite;
+    /* Flexbox để sắp xếp cấu trúc dọc */
+    display: flex;
+    flex-direction: column;
 }
 
 ::-webkit-scrollbar {
@@ -246,6 +259,8 @@ hr.New {
 .Cuoi {
     padding: 40px 0;
     color: #ffffff;
+    /* Đẩy phần bản quyền luôn nằm sát đáy khung viền */
+    margin-top: auto;
 }
 .rainbow {
     margin-top: 15px;
@@ -350,7 +365,6 @@ hr.New {
     animation: fadein 2.0s, fadeout 2.0s 2.0s;
 }
 
-/* ==================== NOTIFICATION ==================== */
 /* ==================== NOTIFICATION - MODERN GLASS POPUP ==================== */
 .notification {
     position: fixed;
@@ -372,7 +386,6 @@ hr.New {
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* Icon / hình ảnh nhỏ (có thể thêm vào HTML) */
 .notification-icon {
     font-size: 48px;
     color: #00ffff;
@@ -399,7 +412,6 @@ hr.New {
     opacity: 0.9;
 }
 
-/* Nút hiện đại */
 .button1 {
     background: linear-gradient(135deg, #00c6ff, #0072ff);
     border: none;
@@ -431,7 +443,6 @@ hr.New {
     box-shadow: 0 5px 15px rgba(0, 114, 255, 0.5);
 }
 
-/* Animation xuất hiện */
 @keyframes floatIn {
     0% {
         opacity: 0;
@@ -443,7 +454,6 @@ hr.New {
     }
 }
 
-/* Responsive */
 @media (max-width: 480px) {
     .notification {
         padding: 20px 18px;
