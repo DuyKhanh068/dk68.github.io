@@ -19,36 +19,38 @@ function ShowToast() {
 
 // -------------------- TYPEWRITER EFFECT --------------------
 const typewriterText = "Hello everyone, I'm a Developer.\nI like website design :3";
-const typeDelay = 150;
 const contentElement = document.querySelector(".contentLetter");
-let typeIndex = 0;
+
+let charIndex = 0;
 let isDeleting = false;
 
 function typeEffect() {
     if (!contentElement) return;
-    if (typeIndex < typewriterText.length && !isDeleting) {
-        if (typewriterText.charAt(typeIndex) === "\n") {
-            contentElement.innerHTML += "<br>";
-        } else {
-            contentElement.innerHTML += typewriterText.charAt(typeIndex);
-        }
-        typeIndex++;
-        setTimeout(typeEffect, typeDelay);
-    } else if (isDeleting) {
-        contentElement.innerHTML = contentElement.innerHTML.slice(0, -1);
-        if (contentElement.innerHTML === "") {
-            isDeleting = false;
-            typeIndex = 0;
-            setTimeout(typeEffect, typeDelay);
-        } else {
-            setTimeout(typeEffect, typeDelay / 1.5);
-        }
+
+    // TỐI ƯU: Sử dụng substring và textContent để tránh render lại toàn bộ DOM
+    const currentString = typewriterText.substring(0, charIndex);
+    contentElement.textContent = currentString;
+
+    // Thiết lập tốc độ: xóa nhanh hơn gõ
+    let typingSpeed = isDeleting ? 70 : 150;
+
+    if (!isDeleting && charIndex < typewriterText.length) {
+        // Đang gõ chữ
+        charIndex++;
+    } else if (isDeleting && charIndex > 0) {
+        // Đang xóa chữ
+        charIndex--;
     } else {
-        isDeleting = true;
-        setTimeout(typeEffect, typeDelay);
+        // Đảo ngược trạng thái: gõ xong thì chờ rồi xóa, xóa xong thì chờ rồi gõ lại
+        isDeleting = !isDeleting;
+        typingSpeed = isDeleting ? 2000 : 500; // Nghỉ 2 giây khi gõ xong, 0.5 giây khi xóa xong
     }
+
+    setTimeout(typeEffect, typingSpeed);
 }
-typeEffect();
+
+// Khởi chạy
+document.addEventListener("DOMContentLoaded", typeEffect);
 
 // -------------------- SOCIAL LINKS --------------------
 function openUrl(url) {
