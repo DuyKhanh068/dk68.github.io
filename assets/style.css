@@ -17,7 +17,6 @@ body {
     scroll-behavior: smooth;
     font-family: 'ZCOOL QingKe HuangYou', sans-serif;
     background: black;
-    min-height: 100vh;
 }
 
 /* ==================== BACKGROUND FIXED LAYERS ==================== */
@@ -48,17 +47,15 @@ body {
     position: relative;
     z-index: 1;
     animation: blur 3s linear forwards;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 10px;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 /* ==================== BORDER & SCROLLBAR ==================== */
 .Border {
     font-size: 12px;
     position: relative;
-    min-height: 100vh;
+    min-height: 100%;
     box-sizing: border-box;
     padding-bottom: 80px;
     background-color: black;
@@ -70,10 +67,9 @@ body {
     animation: bodyborder 5s infinite;
 }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 15px;
 }
 ::-webkit-scrollbar-track {
     box-shadow: inset 0 0 5px grey;
@@ -87,21 +83,20 @@ body {
     background: #00ffbc;
 }
 
-/* ==================== TOPNAV - FLEXIBLE ==================== */
+/* ==================== TOPNAV ==================== */
 .Topnav {
+    overflow: hidden;
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    align-items: center;
-    overflow: hidden;
-    padding: 5px 0;
 }
 .Topnav a {
     font-family: 'ZCOOL QingKe HuangYou';
-    display: inline-block;
+    float: left;
+    display: block;
     color: pink;
     text-align: center;
-    padding: 10px 12px;
+    padding: 12px 14px;
     text-decoration: none;
     font-size: clamp(14px, 4vw, 17px);
     border-bottom: 3px solid transparent;
@@ -116,42 +111,36 @@ body {
     border-bottom: 3px solid #00ff00;
     margin-left: 5px;
 }
-/* Đẩy phần FPS và thời tiết sang phải nếu cần */
-.Topnav a:last-child {
-    margin-left: auto;
-}
 
 /* ==================== AVATAR & TITLES ==================== */
 .Blob {
     background: black;
     border-radius: 50%;
-    margin: 10px auto;
-    height: clamp(100px, 20vw, 150px);
-    width: clamp(100px, 20vw, 150px);
+    margin: 10px;
+    height: clamp(120px, 30vw, 150px);
+    width: clamp(120px, 30vw, 150px);
     background: #111845a6;
     box-sizing: border-box;
     overflow: hidden;
     box-shadow: 0 0 10px 1px #FFFFFF;
     animation: blur 3s linear forwards, pulse 3s infinite;
-    display: block;
 }
 
 .NameFtDuyKhanh {
     color: #FFFFFF;
     padding: 0;
-    font-size: clamp(20px, 6vw, 26px);
-    line-height: 1.4;
-    margin-bottom: 5px;
+    font-size: clamp(18px, 6vw, 22px);
+    line-height: 1.8;
+    margin-bottom: 0;
     text-shadow: -1px 0 5px CYAN, 0 1px 5px RED, 1px 0 5px CYAN, 0 -1px 5px RED;
 }
 
 .TieuSu {
     text-align: center;
     color: #fff;
-    font-size: clamp(18px, 5vw, 22px);
+    font-size: clamp(18px, 6vw, 22px);
     font-weight: bold;
     text-shadow: -1px 0 5px CYAN, 0 1px 5px RED, 1px 0 5px CYAN, 0 -1px 5px RED;
-    padding: 0 8px;
     word-break: break-word;
 }
 
@@ -164,23 +153,25 @@ body {
 }
 .MangXaHoiFtDuyKhanh div {
     border: 2px solid white;
-    border-radius: 10px;
+    border-radius: 7px;
     color: white;
-    padding: 12px 20px;
+    padding: 10px 24px;
     cursor: pointer;
-    width: 85%;
-    max-width: 360px;
+    width: min(85%, 300px);
     margin: 0 auto;
-    font-size: clamp(16px, 4vw, 20px);
+    font-size: clamp(16px, 5vw, 18px);
     transition: 0.5s;
     text-align: center;
     text-shadow: -1px 0 5px CYAN, 0 1px 5px RED, 1px 0 5px CYAN, 0 -1px 5px RED;
+}
+.MangXaHoiFtDuyKhanh div:not(:last-child) {
+    border-right: 2px solid white; /* giữ border đồng nhất */
 }
 .MangXaHoiFtDuyKhanh div:hover {
     transform: translateY(-3px);
 }
 
-/* Gradient chung */
+/* Gradient animation chung cho nút mạng xã hội */
 @keyframes gradientAnimation {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
@@ -190,9 +181,11 @@ body {
 .TikTok, .Facebook, .Instagram, .Telegram {
     position: relative;
     border-radius: 10px;
-    font-size: 1.2rem;
+    font-size: 1rem;
     text-align: center;
     display: block;
+    margin: 10px auto;
+    padding: 10px;
     text-decoration: none;
     -webkit-tap-highlight-color: transparent;
     color: #ffffff !important;
@@ -200,12 +193,26 @@ body {
     background-size: 200% 200%;
     animation: gradientAnimation 3s ease infinite;
     border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 100%;
+    max-width: 300px;
 }
 
-.TikTok { background-image: linear-gradient(45deg, #000000, #25F4EE, #FE2C55, #000000); }
-.Facebook { background-image: linear-gradient(45deg, #1877F2, #3b5998, #00C6FF); }
-.Instagram { background-image: linear-gradient(45deg, #161b22, #24292e, #414b56, #6e5494); }
-.Telegram { background-image: linear-gradient(45deg, #FF0000, #c4302b, #ff4b4b); }
+.TikTok {
+    background-image: linear-gradient(45deg, #000000, #25F4EE, #FE2C55, #000000);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+.Facebook {
+    background-image: linear-gradient(45deg, #1877F2, #3b5998, #00C6FF);
+    box-shadow: 0 4px 15px rgba(24, 119, 242, 0.3);
+}
+.Instagram {
+    background-image: linear-gradient(45deg, #161b22, #24292e, #414b56, #6e5494);
+    box-shadow: 0 4px 15px rgba(36, 41, 46, 0.3);
+}
+.Telegram {
+    background-image: linear-gradient(45deg, #FF0000, #c4302b, #ff4b4b);
+    box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+}
 
 /* ==================== SERVICE CARDS ==================== */
 .ThongTinThanhToan {
@@ -215,27 +222,26 @@ body {
     justify-content: center;
     flex-direction: column;
     background-color: #252525;
-    padding: 16px 12px;
-    border-radius: 12px;
+    padding: 14px;
+    border-radius: 10px;
     box-shadow: 0 0 7px 3px #33FFFF;
     color: #ffffff;
-    width: 90%;
-    max-width: 500px;
+    width: min(95%, 600px);
     margin: 10px auto;
 }
 .ThongTinThanhToan:hover {
     background-color: #353535;
-    transform: scale(0.98);
+    transform: scale(0.95);
 }
 .ThongTinThanhToanTitle {
-    font-size: clamp(18px, 5vw, 24px);
+    font-size: clamp(18px, 6vw, 23px);
     font-weight: 700;
     color: #00FFFF;
     margin: 0;
     text-align: center;
 }
 .ThongTinThanhToanText {
-    font-size: clamp(15px, 4vw, 20px);
+    font-size: clamp(16px, 5vw, 20px);
     font-weight: 500;
     color: #00CC33;
     margin: 5px 0 0;
@@ -243,21 +249,25 @@ body {
 }
 
 /* ==================== HR & MISC ==================== */
-hr.ThanhGachNgang, hr.New {
+hr.ThanhGachNgang {
     border: 0.5px solid #FFFFFF;
     border-style: double;
-    margin: 15px 5%;
-    width: 90%;
+    margin: 0 20px;
+}
+hr.New {
+    border: 0.5px solid #FFFFFF;
+    border-style: double;
+    margin: 0 20px;
 }
 
 .Cuoi {
-    padding: 30px 0 20px;
+    padding: 40px 0;
     color: #ffffff;
 }
 .rainbow {
     margin-top: 15px;
     text-align: center;
-    font-size: clamp(14px, 3.5vw, 16px);
+    font-size: clamp(14px, 4vw, 16px);
     color: #aaa;
     animation: colorRotate 2.5s linear infinite;
 }
@@ -277,32 +287,30 @@ hr.ThanhGachNgang, hr.New {
 /* ==================== SKILL BARS ==================== */
 .skill-box {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    width: 100%;
+    flex-direction: column;
 }
 .skill {
-    width: 85%;
-    max-width: 500px;
-    padding: 0 10px;
+    width: min(90%, 520px);
+    padding: 0 20px;
 }
 .skill-name {
-    font-size: clamp(15px, 4vw, 18px);
+    font-size: clamp(15px, 5vw, 17px);
     font-weight: 700;
     text-transform: uppercase;
     text-shadow: -1px 0 5px white, 0 1px 5px white;
     color: white;
     font-family: "Rubik", sans-serif;
-    margin: 12px 0 5px;
-    text-align: left;
+    margin: 15px 0;
 }
 .skill-bar {
-    height: 10px;
+    height: 12px;
     background: #cccccc;
     border-radius: 8px;
 }
 .skill-per {
-    height: 10px;
+    height: 12px;
     border-radius: 8px;
     width: 0;
     transition: width 1s linear;
@@ -311,23 +319,22 @@ hr.ThanhGachNgang, hr.New {
 .skill-per::before {
     content: attr(per);
     position: absolute;
-    padding: 3px 5px;
+    padding: 4px 6px;
     background-color: #454360;
     color: #fff;
-    font-size: 11px;
+    font-size: 12px;
     border-radius: 4px;
-    top: -30px;
+    top: -35px;
     right: 0;
     transform: translateX(50%);
-    white-space: nowrap;
 }
 .skill-per::after {
     content: '';
     position: absolute;
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     background-color: #454360;
-    top: -14px;
+    top: -16px;
     right: 0;
     transform: translateX(50%) rotate(45deg);
     border-radius: 2px;
@@ -340,19 +347,19 @@ hr.ThanhGachNgang, hr.New {
 /* ==================== TOAST ==================== */
 #Toast {
     visibility: hidden;
-    min-width: 220px;
-    margin-left: -110px;
+    min-width: 250px;
+    margin-left: -125px;
     background-color: #333;
     color: gold;
     text-align: center;
     border-radius: 50px;
     border: 3px solid green;
-    padding: 12px 16px;
+    padding: 16px;
     position: fixed;
     z-index: 1;
     left: 50%;
-    bottom: 30px;
-    font-size: clamp(16px, 4vw, 20px);
+    bottom: 35px;
+    font-size: clamp(16px, 5vw, 20px);
 }
 #Toast.show {
     visibility: visible;
@@ -366,13 +373,13 @@ hr.ThanhGachNgang, hr.New {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 90%;
-    max-width: 400px;
+    max-width: 420px;
     background: rgba(20, 30, 40, 0.75);
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
     border: 1px solid rgba(0, 255, 255, 0.25);
     border-radius: 32px;
-    padding: 24px 18px;
+    padding: 28px 24px;
     text-align: center;
     box-shadow: 0 25px 40px -10px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 255, 255, 0.1) inset;
     z-index: 10000;
@@ -381,16 +388,16 @@ hr.ThanhGachNgang, hr.New {
 }
 
 .notification-icon {
-    font-size: 40px;
+    font-size: clamp(40px, 12vw, 48px);
     color: #00ffff;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     text-shadow: 0 0 20px cyan;
 }
 
 .notification h2 {
-    font-size: clamp(22px, 7vw, 28px);
+    font-size: clamp(24px, 8vw, 28px);
     font-weight: 700;
-    margin: 0 0 5px;
+    margin: 0 0 8px;
     color: #ffffff;
     text-shadow: 0 2px 10px rgba(0, 255, 255, 0.5);
     letter-spacing: -0.5px;
@@ -398,10 +405,10 @@ hr.ThanhGachNgang, hr.New {
 }
 
 .notification p {
-    font-size: clamp(15px, 4vw, 18px);
+    font-size: clamp(16px, 5vw, 18px);
     color: #e0f2fe;
-    margin: 12px 0 20px;
-    line-height: 1.4;
+    margin: 16px 0 24px;
+    line-height: 1.5;
     font-weight: 400;
     opacity: 0.9;
 }
@@ -411,8 +418,8 @@ hr.ThanhGachNgang, hr.New {
     border: none;
     color: white;
     font-weight: 600;
-    font-size: clamp(16px, 4vw, 18px);
-    padding: 12px 28px;
+    font-size: clamp(16px, 5vw, 18px);
+    padding: 14px 32px;
     border-radius: 60px;
     cursor: pointer;
     box-shadow: 0 10px 20px -5px rgba(0, 114, 255, 0.4);
@@ -436,42 +443,16 @@ hr.ThanhGachNgang, hr.New {
     box-shadow: 0 5px 15px rgba(0, 114, 255, 0.5);
 }
 
+/* Animation xuất hiện */
 @keyframes floatIn {
-    0% { opacity: 0; transform: translate(-50%, -45%) scale(0.92); }
-    100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-}
-
-/* ==================== IP & WEATHER DISPLAY ==================== */
-#checkip_address {
-    cursor: pointer;
-    user-select: none;
-    transition: all 0.3s ease !important;
-    display: inline-flex;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: center;
-    font-size: clamp(14px, 4vw, 19px);
-    word-break: break-word;
-}
-#checkip_address:hover {
-    transform: translateY(-2px);
-    text-shadow: 0 0 10px currentColor;
-}
-#checkip_address i {
-    margin-right: 5px;
-    transition: all 0.3s ease;
-}
-
-/* Thông tin thời tiết trên thanh top */
-.Topnav a:last-child {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    white-space: nowrap;
-}
-#weather_temp {
-    display: inline-block;
-    min-width: 60px;
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -45%) scale(0.92);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
 }
 
 /* ==================== ANIMATIONS ==================== */
@@ -493,18 +474,40 @@ hr.ThanhGachNgang, hr.New {
 }
 @keyframes fadein {
     from { bottom: 0; opacity: 0; }
-    to { bottom: 30px; opacity: 1; }
+    to { bottom: 35px; opacity: 1; }
 }
 @keyframes fadeout {
-    from { bottom: 30px; opacity: 1; }
+    from { bottom: 35px; opacity: 1; }
     to { bottom: 0; opacity: 0; }
 }
 
+/* ==================== UTILITIES ==================== */
+#checkip_address {
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.3s ease !important;
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    word-break: break-word;
+    font-size: clamp(14px, 4vw, 16px);
+}
+#checkip_address:hover {
+    transform: translateY(-2px);
+    text-shadow: 0 0 10px currentColor;
+}
+#checkip_address i {
+    transition: all 0.3s ease;
+}
+#checkip_address:hover i {
+    transform: scale(1.2);
+}
+
 /* ==================== RESPONSIVE FINE-TUNING ==================== */
-@media screen and (max-width: 768px) {
+@media only screen and (max-width: 480px) {
     .Border {
-        margin: 5px;
-        border-width: 1.5px;
+        margin: 4px;
     }
     .Topnav a {
         padding: 8px 10px;
@@ -512,50 +515,25 @@ hr.ThanhGachNgang, hr.New {
     .MangXaHoiFtDuyKhanh div {
         width: 95%;
     }
-    .ThongTinThanhToan {
-        width: 95%;
-    }
-}
-
-@media screen and (max-width: 600px) {
-    .Topnav {
-        justify-content: space-around;
-    }
-    .Topnav a:last-child {
-        margin-left: 0;
-        width: 100%;
-        justify-content: center;
-        border-top: 1px solid #444;
-        margin-top: 5px;
-    }
     .skill {
         width: 95%;
+        padding: 0 10px;
+    }
+    .ThongTinThanhToan {
+        width: 98%;
+    }
+    .notification {
+        padding: 20px 16px;
+    }
+    .button1 {
+        padding: 12px 20px;
+    }
+    .rainbow {
+        font-size: 14px;
     }
 }
 
-@media screen and (max-width: 480px) {
-    .BlurWebs {
-        padding: 0 5px;
-    }
-    .NameFtDuyKhanh {
-        font-size: 22px;
-    }
-    .TieuSu {
-        font-size: 18px;
-    }
-    .button1 {
-        padding: 10px 20px;
-    }
-    #checkip_address {
-        font-size: 14px;
-    }
-    .Topnav a {
-        font-size: 13px;
-        padding: 8px 6px;
-    }
-    /* Cho phép nội dung dài tự xuống dòng */
-    .Topnav a:last-child {
-        white-space: normal;
-        text-align: center;
-    }
+/* Đảm bảo container chính không tràn */
+.BlurWebs {
+    word-wrap: break-word;
 }
