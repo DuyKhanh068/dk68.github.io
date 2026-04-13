@@ -19,45 +19,32 @@ function ShowToast() {
 
 // -------------------- TYPEWRITER EFFECT --------------------
 const typewriterText = "Hello everyone, I'm a Developer.\nI like website design :3";
-const typeDelay = 150;
 const contentElement = document.querySelector(".contentLetter");
-let typeIndex = 0;
+
+let charIndex = 0;
 let isDeleting = false;
 
 function typeEffect() {
     if (!contentElement) return;
-    if (typeIndex < typewriterText.length && !isDeleting) {
-        if (typewriterText.charAt(typeIndex) === "\n") {
-            contentElement.innerHTML += "<br>";
-        } else {
-            contentElement.innerHTML += typewriterText.charAt(typeIndex);
-        }
-        typeIndex++;
-        setTimeout(typeEffect, typeDelay);
-    } else if (isDeleting) {
-        contentElement.innerHTML = contentElement.innerHTML.slice(0, -1);
-        if (contentElement.innerHTML === "") {
-            isDeleting = false;
-            typeIndex = 0;
-            setTimeout(typeEffect, typeDelay);
-        } else {
-            setTimeout(typeEffect, typeDelay / 1.5);
-        }
-    } else {
-        isDeleting = true;
-        setTimeout(typeEffect, typeDelay);
-    }
-}
-typeEffect();
 
-// -------------------- SOCIAL LINKS --------------------
-function openUrl(url) {
-    setTimeout(() => window.open(url, '_blank'), 100);
+    const currentString = typewriterText.substring(0, charIndex);
+    contentElement.textContent = currentString;
+
+    let typingSpeed = isDeleting ? 70 : 150;
+
+    if (!isDeleting && charIndex < typewriterText.length) {
+        charIndex++;
+    } else if (isDeleting && charIndex > 0) {
+        charIndex--;
+    } else {
+        isDeleting = !isDeleting;
+        typingSpeed = isDeleting ? 2000 : 500; 
+    }
+
+    setTimeout(typeEffect, typingSpeed);
 }
-function TikTok()  { openUrl('https://www.tiktok.com/@duy.khanh98'); }
-function Facebook(){ openUrl('https://www.facebook.com/profile.php?id=100084065153231'); }
-function Instagram(){ openUrl('https://github.com/DuyKhanh068'); }
-function Telegram() { openUrl('https://youtube.com/@DuyyKhanh68'); }
+
+document.addEventListener("DOMContentLoaded", typeEffect);
 
 // -------------------- FPS COUNTER --------------------
 const fpsElement = document.getElementById("fps");
@@ -331,22 +318,39 @@ function rotateView() {
     }, 300);
 }
 
-// -------------------- SKILL BARS ANIMATION (jQuery) --------------------
-$(document).ready(function(){
-    $('.skill-per').each(function() {
-        const $this = $(this);
-        const per = $this.attr('per');
-        $({ val: 0 }).animate({ val: per }, {
-            duration: 3000,
-            step: function(now) {
-                $this.css("width", Math.floor(now) + '%');
-                $this.attr('per', Math.floor(now) + '%');
-            },
-            complete: function() {
-                $this.css("width", per + '%');
-                $this.attr('per', per + '%');
+// -------------------- SKILL BARS ANIMATION (Vanilla JS) --------------------
+document.addEventListener("DOMContentLoaded", () => {
+    const skillBars = document.querySelectorAll('.skill-per');
+
+    skillBars.forEach(bar => {
+        // Lấy con số % đích đến từ thuộc tính 'per'
+        const targetPer = parseInt(bar.getAttribute('per'), 10);
+        const duration = 3000; // Thời gian chạy hiệu ứng (3000ms = 3 giây)
+        let startTime = null;
+
+        function animateSkill(currentTime) {
+            if (!startTime) startTime = currentTime;
+            const progress = currentTime - startTime;
+            
+            // Tính toán phần trăm hiện tại dựa trên thời gian trôi qua
+            const percentage = Math.min((progress / duration) * targetPer, targetPer);
+
+            // Cập nhật giao diện
+            bar.style.width = Math.floor(percentage) + '%';
+            bar.setAttribute('per', Math.floor(percentage) + '%');
+
+            if (progress < duration) {
+                // Tiếp tục gọi animation frame tiếp theo nếu chưa hết thời gian
+                requestAnimationFrame(animateSkill);
+            } else {
+                // Đảm bảo số cuối cùng chính xác khi kết thúc
+                bar.style.width = targetPer + '%';
+                bar.setAttribute('per', targetPer + '%');
             }
-        });
+        }
+
+        // Bắt đầu hiệu ứng
+        requestAnimationFrame(animateSkill);
     });
 });
 

@@ -6,12 +6,10 @@
     <link rel="shortcut icon" href="https://lh3.googleusercontent.com/d/1JXrKRQvrm2t6fYXkqu4Y8RQHUxm0gmoI" type="image/x-icon">
     <title>DuyKhanh | Profile</title>
     
-    <!-- Stylesheets -->
     <link rel="stylesheet" href="assets/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     
-    <!-- Meta tags -->
     <meta name="author" content="Đây Là Website Của DUYKHANH-Dev, Rất Mong Được Chào Đón Bạn !">
     <meta property="og:title" content="HELLO EVERYONE !">
     <meta property="og:type" content="website">
@@ -22,20 +20,16 @@
     <meta property="og:site_name" content="DuyKhanh06">
     <meta name="theme-color" content="#00FFFF" />
     
-    <!-- jQuery (nếu cần cho animation skill) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+   
 </head>
 
 <body class="Border" onload="onCreate()">
-    <!-- Lớp nền cố định -->
     <div id="background-layer"></div>
     <div class="overlay-dim"></div>
 
-    <!-- Nội dung chính -->
     <div class="BlurWebs">
-        <!-- Thanh điều hướng -->
         <div class="Topnav">
-            <a class="Active">HOME</a>
+            <a class="Active" href="javascript:void(0)">HOME</a>
             <a style="color:cyan;"><span id="fps">144.0</span> FPS</a>
             <a style="float: right; color: #f1c40f; cursor: default; min-width: 160px; text-align: right; transition: all 0.5s;">
                 <i class="fas fa-temperature-high"></i> 
@@ -45,15 +39,13 @@
         </div>
         
         <br>
-        <!-- Avatar -->
-        <p align="center">
+        <p style="text-align: center;">
             <img class="Blob" src="https://lh3.googleusercontent.com/d/1JXrKRQvrm2t6fYXkqu4Y8RQHUxm0gmoI" width="96" height="96" alt="Avatar">
         </p>
-        <h2 class="NameFtDuyKhanh" align="center">Duy Khánh <i class="fa fa-check-circle"></i></h2>
+        <h2 class="NameFtDuyKhanh" style="text-align: center;">Duy Khánh <i class="fa fa-check-circle"></i></h2>
         <h2 class="TieuSu"><span class="contentLetter"></span></h2>
         <br>
         
-        <!-- Thông tin IP và thời gian tạo -->
         <strong style="color: rgb(255, 238, 0); font-size: 19px; font-family: 'Rowdies';">Your Info <a id="checkip_address">Loading your address....</a></strong>
         <br>
         <strong style="color: rgb(255, 0, 0); font-size: 20px; font-family: 'Rowdies';">Date Created:</strong>
@@ -62,21 +54,19 @@
         
         <hr class="New"><br>
         
-        <!-- Social Network -->
-        <h2 class="NameFtDuyKhanh">Social Network</h2>
-        <ul class="icons">
+        <h2 class="NameFtDuyKhanh" style="text-align: center;">Social Network</h2>
+        <div class="icons">
             <br>
             <div class="MangXaHoiFtDuyKhanh">
-                <a id="TikTok" onclick="TikTok()"><div class="TikTok"><i class="fab fa-tiktok"></i> TikTok</div></a>
-                <a id="Facebook" onclick="Facebook()"><div class="Facebook"><i class="fab fa-facebook-f"></i> Facebook</div></a>
-                <a id="Instagram" onclick="Instagram()"><div class="Instagram"><i class="fab fa-github"></i> Github</div></a>
-                <a id="Telegram" onclick="Telegram()"><div class="Telegram"><i class="fab fa-youtube"></i> YouTube</div></a>
+                <a href="https://www.tiktok.com/@duy.khanh98" target="_blank" rel="noopener noreferrer"><div class="TikTok"><i class="fab fa-tiktok"></i> TikTok</div></a>
+                <a href="https://www.facebook.com/profile.php?id=100084065153231" target="_blank" rel="noopener noreferrer"><div class="Facebook"><i class="fab fa-facebook-f"></i> Facebook</div></a>
+                <a href="https://github.com/DuyKhanh068" target="_blank" rel="noopener noreferrer"><div class="Github"><i class="fab fa-github"></i> Github</div></a>
+                <a href="https://youtube.com/@DuyyKhanh68" target="_blank" rel="noopener noreferrer"><div class="YouTube"><i class="fab fa-youtube"></i> YouTube</div></a>
             </div>
-        </ul>
+        </div>
         <br>
         <hr class="New"><br>
         
-        <!-- Dịch vụ MXH -->
         <div class="NameFtDuyKhanh"><h2>DV MXH</h2></div>
         <div class="ThongTinThanhToan">
             <p class="ThongTinThanhToanTitle">HOÀN TIỀN CHPLAY, APPSTORE</p>
@@ -97,7 +87,6 @@
         <hr class="ThanhGachNgang">
         <br><br>
         
-        <!-- Kỹ năng -->
         <section id="skills">
             <div class="container skills">
                 <div class="row">
@@ -135,10 +124,9 @@
         
         <hr class="ThanhGachNgang">
         
-        <!-- Footer -->
         <footer class="Cuoi Trang">
             <p class="rainbow copyright">Created by 
-                <a style="text-decoration: none;" href="https://www.facebook.com/profile.php?id=100084065153231&mibextid=ZbWKwL">
+                <a style="text-decoration: none;" href="https://www.facebook.com/profile.php?id=100084065153231" target="_blank" rel="noopener noreferrer">
                     <font class="rainbow" color="white"> DuyKhanh</font>
                 </a>
                 <br> <strong>All rights reserved - © 2025</strong>
@@ -146,23 +134,20 @@
         </footer>
     </div>
 
-    <!-- Notification popup -->
-   <!-- Notification popup hiện đại -->
-<div id="notification" class="notification">
-    <div class="notification-icon">
-        <i class="fas fa-bell"></i>
+    <div id="notification" class="notification">
+        <div class="notification-icon">
+            <i class="fas fa-bell"></i>
+        </div>
+        <h2>Chào mừng!</h2>
+        <p>Rất vui được gặp bạn tại không gian của Duy Khánh 💻</p>
+        <button class="button1" onclick="hideNotification()">
+            <i class="fas fa-headphones-alt" style="margin-right: 8px;"></i>Khám phá ngay
+        </button>
     </div>
-    <h2>Chào mừng!</h2>
-    <p>Rất vui được gặp bạn tại không gian của Duy Khánh 💻</p>
-    <button class="button1" onclick="hideNotification()">
-        <i class="fas fa-headphones-alt" style="margin-right: 8px;"></i>Khám phá ngay
-    </button>
-</div>
 
     <audio id="myAudio"></audio>
     <div id="Toast">Designed by DuyKhanh :))</div>
 
-    <!-- JavaScript tổng hợp -->
     <script src="assets/main.js"></script>
 </body>
 </html>

@@ -8,7 +8,6 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    border-radius: 0;
     user-select: none;
 }
 
@@ -137,6 +136,13 @@ body {
     text-shadow: -1px 0 5px CYAN, 0 1px 5px RED, 1px 0 5px CYAN, 0 -1px 5px RED;
 }
 
+/* OPTIMIZED TYPEWRITER CLASS */
+.contentLetter {
+    white-space: pre-line;
+    display: inline-block;
+    min-height: 1.5em;
+}
+
 /* ==================== SOCIAL BUTTONS ==================== */
 .MangXaHoiFtDuyKhanh div {
     border: 2px solid white;
@@ -158,14 +164,13 @@ body {
     transform: translateY(-3px);
 }
 
-/* Gradient animation chung cho nút mạng xã hội */
 @keyframes gradientAnimation {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
 
-.TikTok, .Facebook, .Instagram, .Telegram {
+.TikTok, .Facebook, .Github, .YouTube {
     position: relative;
     border-radius: 10px;
     font-size: 1rem;
@@ -190,13 +195,19 @@ body {
     background-image: linear-gradient(45deg, #1877F2, #3b5998, #00C6FF);
     box-shadow: 0 4px 15px rgba(24, 119, 242, 0.3);
 }
-.Instagram {
+/* Đã sửa tên class cho đồng bộ */
+.Github {
     background-image: linear-gradient(45deg, #161b22, #24292e, #414b56, #6e5494);
     box-shadow: 0 4px 15px rgba(36, 41, 46, 0.3);
 }
-.Telegram {
+.YouTube {
     background-image: linear-gradient(45deg, #FF0000, #c4302b, #ff4b4b);
     box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+}
+
+/* Các thẻ a bọc ngoài không được có gạch chân */
+.MangXaHoiFtDuyKhanh a {
+    text-decoration: none;
 }
 
 /* ==================== SERVICE CARDS ==================== */
@@ -297,7 +308,7 @@ hr.New {
     height: 12px;
     border-radius: 8px;
     width: 0;
-    transition: width 1s linear;
+    /* transition: width 1s linear;  <-- XÓA DÒNG NÀY ĐI */
     position: relative;
 }
 .skill-per::before {
@@ -351,7 +362,6 @@ hr.New {
 }
 
 /* ==================== NOTIFICATION ==================== */
-/* ==================== NOTIFICATION - MODERN GLASS POPUP ==================== */
 .notification {
     position: fixed;
     top: 50%;
@@ -372,7 +382,6 @@ hr.New {
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* Icon / hình ảnh nhỏ (có thể thêm vào HTML) */
 .notification-icon {
     font-size: 48px;
     color: #00ffff;
@@ -399,13 +408,11 @@ hr.New {
     opacity: 0.9;
 }
 
-/* Nút hiện đại */
 .button1 {
     background: linear-gradient(135deg, #00c6ff, #0072ff);
     border: none;
     color: white;
     font-weight: 600;
-    font-size: 16px;
     padding: 14px 32px;
     border-radius: 60px;
     cursor: pointer;
@@ -431,37 +438,11 @@ hr.New {
     box-shadow: 0 5px 15px rgba(0, 114, 255, 0.5);
 }
 
-/* Animation xuất hiện */
-@keyframes floatIn {
-    0% {
-        opacity: 0;
-        transform: translate(-50%, -45%) scale(0.92);
-    }
-    100% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-    }
-}
-
-/* Responsive */
-@media (max-width: 480px) {
-    .notification {
-        padding: 20px 18px;
-        border-radius: 28px;
-    }
-    .notification h2 {
-        font-size: 24px;
-    }
-    .notification p {
-        font-size: 16px;
-    }
-    .button1 {
-        padding: 12px 24px;
-        font-size: 16px;
-    }
-}
-
 /* ==================== ANIMATIONS ==================== */
+@keyframes floatIn {
+    0% { opacity: 0; transform: translate(-50%, -45%) scale(0.92); }
+    100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
 @keyframes pulse {
     0% { transform: scale(0.99); }
     50% { transform: scale(1.1); }
@@ -486,16 +467,6 @@ hr.New {
     from { bottom: 35px; opacity: 1; }
     to { bottom: 0; opacity: 0; }
 }
-@keyframes rainbow {
-    0% { color: red; }
-    14% { color: orange; }
-    28% { color: yellow; }
-    42% { color: green; }
-    57% { color: blue; }
-    71% { color: indigo; }
-    85% { color: violet; }
-    100% { color: red; }
-}
 
 /* ==================== UTILITIES ==================== */
 #checkip_address {
@@ -514,4 +485,15 @@ hr.New {
 }
 #checkip_address:hover i {
     transform: scale(1.2);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .notification {
+        padding: 20px 18px;
+        border-radius: 28px;
+    }
+    .notification h2 { font-size: 24px; }
+    .notification p { font-size: 16px; }
+    .button1 { padding: 12px 24px; font-size: 16px; }
 }
