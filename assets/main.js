@@ -142,21 +142,7 @@ async function checkip_address() {
                 };
             }
         },
-        {
-            name: "ip-api.com",
-            url: "http://ip-api.com/json/?fields=status,message,country,city,lat,lon,query,org",
-            parse: (data) => {
-                if (data.status !== "success" || !isValidIP(data.query)) throw new Error("API error");
-                return {
-                    ip: data.query,
-                    isp: data.org || "Unknown ISP",
-                    city: data.city || "Unknown",
-                    location: `${data.city || "Unknown"}, ${data.country || "Unknown"}`,
-                    lat: data.lat || null,
-                    lon: data.lon || null
-                };
-            }
-        },
+
         {
             name: "ipwho.is",
             url: "https://ipwho.is/",
