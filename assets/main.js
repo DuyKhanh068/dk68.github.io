@@ -19,10 +19,11 @@ function ShowToast() {
 
 // -------------------- TYPEWRITER EFFECT --------------------
 const typewriterText = "Hello everyone, I'm a Developer.\nI like website design :3";
-const contentElement = document.querySelector(".contentLetter");
+let contentElement = null;
 
 let charIndex = 0;
 let isDeleting = false;
+let typewriterTimer = null;
 
 function typeEffect() {
     if (!contentElement) return;
@@ -38,67 +39,83 @@ function typeEffect() {
         charIndex--;
     } else {
         isDeleting = !isDeleting;
-        typingSpeed = isDeleting ? 2000 : 500; 
+        typingSpeed = isDeleting ? 2000 : 500;
     }
 
-    setTimeout(typeEffect, typingSpeed);
+    typewriterTimer = setTimeout(typeEffect, typingSpeed);
 }
 
-document.addEventListener("DOMContentLoaded", typeEffect);
-
-// -------------------- FPS COUNTER --------------------
-const fpsElement = document.getElementById("fps");
-let fpsStart = Date.now();
+// -------------------- FPS COUNTER (throttled) --------------------
+let fpsElement = null;
+let fpsStart = 0;
 let fpsFrame = 0;
-function fpsTick() {
-    const now = Date.now();
+let fpsRafId = null;
+
+function fpsTick(now) {
     fpsFrame++;
+    // Chỉ update DOM mỗi giây thay vì mỗi frame
     if (now - fpsStart > 1000) {
         if (fpsElement) {
-            fpsElement.textContent = (fpsFrame / ((now - fpsStart) / 1000)).toFixed(1);
+            fpsElement.textContent = (fpsFrame * 1000 / (now - fpsStart)).toFixed(1);
         }
         fpsStart = now;
         fpsFrame = 0;
     }
-    requestAnimationFrame(fpsTick);
+    fpsRafId = requestAnimationFrame(fpsTick);
 }
-fpsTick();
 
 // -------------------- MUSIC PLAYER --------------------
-const songList = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+const songList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+let lastSongIndex = -1;
+
 function getRandomAudio() {
-    const randomIndex = Math.floor(Math.random() * songList.length);
+    let randomIndex;
+    // Tránh lặp lại bài vừa phát
+    do {
+        randomIndex = Math.floor(Math.random() * songList.length);
+    } while (randomIndex === lastSongIndex && songList.length > 1);
+    lastSongIndex = randomIndex;
     return `music/${songList[randomIndex]}.mp3`;
 }
+
 function playMusic() {
     const audio = document.getElementById("myAudio");
     if (!audio) return;
     audio.src = getRandomAudio();
     audio.play().catch(e => console.log("Autoplay blocked:", e));
-    audio.onended = () => playMusic();
+    audio.onended = playMusic;
 }
+
 function hideNotification() {
     const notif = document.getElementById("notification");
     if (notif) notif.style.display = "none";
     playMusic();
 }
 
-// -------------------- DATE CREATED (time‑activated) --------------------
+// -------------------- DATE CREATED (setInterval thay setTimeout đệ quy) --------------------
+let dateInterval = null;
+
 function updateDateCreated() {
     const momk = document.getElementById("momk");
     if (!momk) return;
-    const birthDay = new Date("2023/08/06");
-    const today = new Date();
-    const diff = today - birthDay;
-    const seconds = Math.floor(diff / 1000);
-    const days = Math.floor(seconds / 86400);
-    const hours = Math.floor((seconds % 86400) / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
-    momk.textContent = `${days} ngày ${hours} giờ ${minutes} phút ${secs} giây`;
-    setTimeout(updateDateCreated, 1000);
+
+    const birthDay = new Date("2023/08/06").getTime();
+
+    // Cập nhật lần đầu ngay lập tức
+    function tick() {
+        const diff = Date.now() - birthDay;
+        const seconds = Math.floor(diff / 1000);
+        const days = Math.floor(seconds / 86400);
+        const hours = Math.floor((seconds % 86400) / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+        momk.textContent = `${days} ngày ${hours} giờ ${minutes} phút ${secs} giây`;
+    }
+
+    tick();
+    // setInterval tránh memory leak từ setTimeout đệ quy chồng chất
+    dateInterval = setInterval(tick, 1000);
 }
-updateDateCreated();
 
 // -------------------- IP & WEATHER (tích hợp) --------------------
 let ipData = {
@@ -106,6 +123,7 @@ let ipData = {
     city: "Checking...", lat: null, lon: null, ready: false
 };
 let ipViewState = 0; // 0:IP, 1:ISP, 2:Location
+let ipFetching = false; // Ngăn fetch trùng lặp
 
 function normalizeISP(isp) {
     if (!isp || isp === "Unknown ISP" || isp === "Network Hidden") return "Unknown ISP";
@@ -125,6 +143,10 @@ function isValidIP(ip) {
 }
 
 async function checkip_address() {
+    // Ngăn gọi trùng lặp
+    if (ipFetching) return;
+    ipFetching = true;
+
     const sources = [
         {
             name: "ipinfo.io",
@@ -142,7 +164,6 @@ async function checkip_address() {
                 };
             }
         },
-
         {
             name: "ipwho.is",
             url: "https://ipwho.is/",
@@ -171,6 +192,7 @@ async function checkip_address() {
             const parsed = src.parse(data);
             parsed.isp = normalizeISP(parsed.isp);
             ipData = { ...ipData, ...parsed, ready: true };
+            ipFetching = false;
             rotateIPInfo();
             updateWeatherData(parsed.lat, parsed.lon, parsed.city);
             return;
@@ -178,9 +200,10 @@ async function checkip_address() {
             console.warn(`${src.name} failed:`, e.message);
         }
     }
+
     // Fallback
     ipData = {
-        ip: `192.168.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`,
+        ip: `192.168.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`,
         isp: "Local Network",
         city: "Local",
         location: "Local Network",
@@ -188,17 +211,25 @@ async function checkip_address() {
         lon: 105.8542,
         ready: true
     };
+    ipFetching = false;
     rotateIPInfo();
     updateWeatherData(21.0285, 105.8542, "Hanoi");
 }
 
+// Cache DOM element cho rotateIPInfo
+let ipElement = null;
+let ipRotateTimer = null;
+
 function rotateIPInfo() {
     if (!ipData.ready) return;
-    const el = document.getElementById("checkip_address");
-    if (!el) return;
-    el.style.transition = "opacity 0.3s";
-    el.style.opacity = 0;
-    setTimeout(() => {
+    if (!ipElement) ipElement = document.getElementById("checkip_address");
+    if (!ipElement) return;
+
+    ipElement.style.opacity = 0;
+
+    // Dùng biến đã clear để tránh overlap
+    clearTimeout(ipRotateTimer);
+    ipRotateTimer = setTimeout(() => {
         let icon, text, color;
         if (ipViewState === 0) {
             icon = '<i class="fas fa-globe" style="margin-right:6px;color:#00FFFF;"></i>';
@@ -216,18 +247,22 @@ function rotateIPInfo() {
             color = "#2ECC71";
             ipViewState = 0;
         }
-        el.innerHTML = icon + text;
-        el.style.color = color;
-        el.title = `IP: ${ipData.ip}\nISP: ${ipData.isp}\nLocation: ${ipData.location}\nCity: ${ipData.city}`;
-        el.style.opacity = 1;
+        ipElement.innerHTML = icon + text;
+        ipElement.style.color = color;
+        ipElement.title = `IP: ${ipData.ip}\nISP: ${ipData.isp}\nLocation: ${ipData.location}\nCity: ${ipData.city}`;
+        ipElement.style.opacity = 1;
     }, 300);
 }
 
 // Weather
 let wData = { city: "Loading...", temp: "--", rain_mm: 0, rain_prob: 0, aqi: "--", ready: false };
 let viewState = 0;
+let weatherFetching = false;
 
 async function updateWeatherData(customLat, customLon, customCity) {
+    if (weatherFetching) return;
+    weatherFetching = true;
+
     const lat = customLat || ipData.lat || 21.0285;
     const lon = customLon || ipData.lon || 105.8542;
     const city = customCity || ipData.city || "Hanoi";
@@ -235,10 +270,13 @@ async function updateWeatherData(customLat, customLon, customCity) {
     const locEl = document.getElementById('weather_loc');
     if (locEl) locEl.textContent = city;
 
-    try {
-        const wRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,precipitation&hourly=precipitation_probability&timezone=auto`);
-        if (wRes.ok) {
-            const wJson = await wRes.json();
+    // Fetch weather và AQI song song thay vì tuần tự
+    const weatherPromise = fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,precipitation&hourly=precipitation_probability&timezone=auto`)
+        .then(res => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return res.json();
+        })
+        .then(wJson => {
             if (wJson.current) {
                 wData.temp = Math.round(wJson.current.temperature_2m);
                 wData.rain_mm = wJson.current.precipitation || 0;
@@ -247,110 +285,197 @@ async function updateWeatherData(customLat, customLon, customCity) {
                     wData.rain_prob = wJson.hourly.precipitation_probability[hour] || 0;
                 }
             }
-        }
-    } catch (e) { console.warn("Weather fetch error:", e); }
+        })
+        .catch(e => console.warn("Weather fetch error:", e));
 
-    try {
-        const aqiRes = await fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=us_aqi`);
-        if (aqiRes.ok) {
-            const aqiJson = await aqiRes.json();
+    const aqiPromise = fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=us_aqi`)
+        .then(res => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return res.json();
+        })
+        .then(aqiJson => {
             if (aqiJson.current?.us_aqi !== undefined) wData.aqi = aqiJson.current.us_aqi;
-        }
-    } catch (e) { console.warn("AQI fetch error:", e); }
+        })
+        .catch(e => console.warn("AQI fetch error:", e));
+
+    await Promise.allSettled([weatherPromise, aqiPromise]);
 
     wData.ready = true;
+    weatherFetching = false;
+
     if (!window.weatherInitialized) {
         rotateView();
         window.weatherInitialized = true;
     }
 }
 
+// Cache DOM elements cho rotateView
+let weatherTempEl = null;
+let weatherIconEl = null;
+let weatherRotateTimer = null;
+
 function rotateView() {
     if (!wData.ready) return;
-    const el = document.getElementById('weather_temp');
-    const icon = el?.parentElement?.querySelector('i');
-    if (!el) return;
-    el.style.transition = "opacity 0.3s";
-    el.style.opacity = 0;
-    setTimeout(() => {
+    if (!weatherTempEl) weatherTempEl = document.getElementById('weather_temp');
+    if (!weatherTempEl) return;
+    if (!weatherIconEl) weatherIconEl = weatherTempEl.parentElement?.querySelector('i');
+
+    weatherTempEl.style.opacity = 0;
+
+    clearTimeout(weatherRotateTimer);
+    weatherRotateTimer = setTimeout(() => {
         if (viewState === 0) {
-            if (icon) {
-                icon.className = "fas fa-temperature-high";
-                icon.style.color = wData.temp > 30 ? "#e74c3c" : wData.temp > 25 ? "#f39c12" : "#3498db";
+            if (weatherIconEl) {
+                weatherIconEl.className = "fas fa-temperature-high";
+                weatherIconEl.style.color = wData.temp > 30 ? "#e74c3c" : wData.temp > 25 ? "#f39c12" : "#3498db";
             }
-            el.innerHTML = `<span style="font-weight:bold;">${Math.round(wData.temp)}°C</span>`;
+            weatherTempEl.innerHTML = `<span style="font-weight:bold;">${Math.round(wData.temp)}°C</span>`;
             viewState = 1;
         } else if (viewState === 1) {
-            if (icon) {
-                icon.className = "fas fa-cloud-rain";
-                icon.style.color = "#3498db";
+            if (weatherIconEl) {
+                weatherIconEl.className = "fas fa-cloud-rain";
+                weatherIconEl.style.color = "#3498db";
             }
             const rain = wData.rain_mm > 0 ? `${parseFloat(wData.rain_mm).toFixed(1)}mm (${Math.round(wData.rain_prob)}%)` : `${Math.round(wData.rain_prob)}%`;
-            el.innerHTML = `<span style="font-weight:bold;">${rain}</span>`;
+            weatherTempEl.innerHTML = `<span style="font-weight:bold;">${rain}</span>`;
             viewState = 2;
         } else {
-            if (icon) {
-                icon.className = "fas fa-wind";
+            if (weatherIconEl) {
+                weatherIconEl.className = "fas fa-wind";
                 let color = "#27ae60";
                 if (wData.aqi > 50) color = "#f1c40f";
                 if (wData.aqi > 100) color = "#e67e22";
                 if (wData.aqi > 150) color = "#e74c3c";
-                icon.style.color = color;
+                weatherIconEl.style.color = color;
             }
-            el.innerHTML = `<span style="font-weight:bold;">AQI ${Math.round(wData.aqi)}</span>`;
+            weatherTempEl.innerHTML = `<span style="font-weight:bold;">AQI ${Math.round(wData.aqi)}</span>`;
             viewState = 0;
         }
-        el.style.opacity = 1;
+        weatherTempEl.style.opacity = 1;
     }, 300);
 }
 
-// -------------------- SKILL BARS ANIMATION (Vanilla JS) --------------------
-document.addEventListener("DOMContentLoaded", () => {
+// -------------------- SKILL BARS ANIMATION (IntersectionObserver + rAF) --------------------
+function initSkillBars() {
     const skillBars = document.querySelectorAll('.skill-per');
+    if (!skillBars.length) return;
 
-    skillBars.forEach(bar => {
-        // Lấy con số % đích đến từ thuộc tính 'per'
+    function animateBar(bar) {
         const targetPer = parseInt(bar.getAttribute('per'), 10);
-        const duration = 3000; // Thời gian chạy hiệu ứng (3000ms = 3 giây)
+        if (isNaN(targetPer)) return;
+
+        const duration = 3000;
         let startTime = null;
 
-        function animateSkill(currentTime) {
+        function step(currentTime) {
             if (!startTime) startTime = currentTime;
             const progress = currentTime - startTime;
-            
-            // Tính toán phần trăm hiện tại dựa trên thời gian trôi qua
             const percentage = Math.min((progress / duration) * targetPer, targetPer);
+            const floored = Math.floor(percentage);
 
-            // Cập nhật giao diện
-            bar.style.width = Math.floor(percentage) + '%';
-            bar.setAttribute('per', Math.floor(percentage) + '%');
+            // Batch write: chỉ update khi giá trị thực sự thay đổi
+            bar.style.width = floored + '%';
+            bar.setAttribute('per', floored + '%');
 
             if (progress < duration) {
-                // Tiếp tục gọi animation frame tiếp theo nếu chưa hết thời gian
-                requestAnimationFrame(animateSkill);
+                requestAnimationFrame(step);
             } else {
-                // Đảm bảo số cuối cùng chính xác khi kết thúc
                 bar.style.width = targetPer + '%';
                 bar.setAttribute('per', targetPer + '%');
             }
         }
 
-        // Bắt đầu hiệu ứng
-        requestAnimationFrame(animateSkill);
-    });
-});
+        requestAnimationFrame(step);
+    }
+
+    // Dùng IntersectionObserver: chỉ animate khi skill bars vào viewport
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateBar(entry.target);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        skillBars.forEach(bar => observer.observe(bar));
+    } else {
+        // Fallback cho trình duyệt cũ
+        skillBars.forEach(bar => animateBar(bar));
+    }
+}
 
 // -------------------- INTERVALS & LISTENERS --------------------
+// Lưu trữ interval IDs để có thể cleanup
+let intervalsIds = [];
+
 document.addEventListener('DOMContentLoaded', () => {
-    setInterval(rotateIPInfo, 4000);
-    setInterval(rotateView, 4000);
-    setInterval(() => { if (ipData.ready) updateWeatherData(); }, 600000);
-    setInterval(() => { if (ipData.ready && ipData.ip.startsWith("192.168.")) checkip_address(); }, 300000);
+    // Cache DOM elements
+    contentElement = document.querySelector(".contentLetter");
+    fpsElement = document.getElementById("fps");
+
+    // Khởi tạo FPS counter
+    fpsStart = performance.now();
+    fpsFrame = 0;
+    fpsRafId = requestAnimationFrame(fpsTick);
+
+    // Khởi tạo IP + Toast (thay thế onCreate/onLoad)
+    ShowToast();
+    checkip_address();
+
+    // Khởi tạo typewriter
+    typeEffect();
+
+    // Khởi tạo date counter
+    updateDateCreated();
+
+    // Khởi tạo skill bars
+    initSkillBars();
+
+    // Intervals - với tần suất hợp lý
+    intervalsIds.push(setInterval(rotateIPInfo, 4000));
+    intervalsIds.push(setInterval(rotateView, 4000));
+    // Cập nhật weather mỗi 10 phút
+    intervalsIds.push(setInterval(() => { if (ipData.ready) updateWeatherData(); }, 600000));
+    // Retry IP nếu đang dùng fallback - mỗi 5 phút
+    intervalsIds.push(setInterval(() => { if (ipData.ready && ipData.ip.startsWith("192.168.")) checkip_address(); }, 300000));
+});
+
+// Tạm dừng animations khi tab không active → tiết kiệm CPU/pin
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        // Dừng FPS counter khi tab ẩn
+        if (fpsRafId) {
+            cancelAnimationFrame(fpsRafId);
+            fpsRafId = null;
+        }
+        // Dừng date counter
+        if (dateInterval) {
+            clearInterval(dateInterval);
+            dateInterval = null;
+        }
+        // Dừng typewriter
+        if (typewriterTimer) {
+            clearTimeout(typewriterTimer);
+            typewriterTimer = null;
+        }
+    } else {
+        // Khôi phục khi quay lại tab
+        fpsStart = performance.now();
+        fpsFrame = 0;
+        if (!fpsRafId) fpsRafId = requestAnimationFrame(fpsTick);
+
+        if (!dateInterval) updateDateCreated();
+
+        if (!typewriterTimer) typeEffect();
+    }
 });
 
 // Refresh thủ công khi click vào IP
 document.addEventListener('click', (e) => {
     if (e.target.closest('#checkip_address')) {
+        if (ipFetching) return; // Đang fetch rồi thì bỏ qua
         ipData.ready = false;
         const ipEl = document.getElementById("checkip_address");
         if (ipEl) ipEl.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> Refreshing...';
