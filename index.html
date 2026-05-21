@@ -47,8 +47,6 @@
 </head>
 
 <body class="Border">
-    <div id="scroll-progress"></div>
-    <canvas id="particle-canvas"></canvas>
     <div id="background-layer">
         <div class="bg-blob bg-blob1"></div>
         <div class="bg-blob bg-blob2"></div>
@@ -176,35 +174,7 @@
     <audio id="myAudio" preload="none"></audio>
     <div id="Toast">Designed by DuyKhanh :))</div>
 
+    <!-- defer: không block render, chạy sau khi HTML parse xong -->
     <script src="assets/main.js" defer></script>
-
-    <!-- Floating Contact -->
-    <div id="float-contact">
-        <div class="float-menu" id="float-menu">
-            <a href="https://www.facebook.com/profile.php?id=100084065153231" target="_blank" rel="noopener noreferrer" class="float-item" title="Facebook" style="--i:1"><i class="fab fa-facebook-messenger"></i></a>
-            <a href="https://www.tiktok.com/@duy.khanh98" target="_blank" rel="noopener noreferrer" class="float-item" title="TikTok" style="--i:2"><i class="fab fa-tiktok"></i></a>
-            <a href="https://github.com/DuyKhanh068" target="_blank" rel="noopener noreferrer" class="float-item" title="GitHub" style="--i:3"><i class="fab fa-github"></i></a>
-        </div>
-        <button id="float-btn" aria-label="Liên hệ"><i class="fas fa-comments" id="float-icon"></i></button>
-    </div>
-
-    <!-- AI Chatbot -->
-    <div id="chatbot">
-        <div class="chatbot-header">
-            <div><i class="fas fa-robot" style="margin-right:6px;color:#00ffff;"></i><span>DK Bot</span><span id="chat-status" class="chat-status">● Online</span></div>
-            <button id="close-chat"><i class="fas fa-times"></i></button>
-        </div>
-        <div id="chat-messages">
-            <div class="bot-msg">Xin chào! Mình là DK Bot 🤖<br>Hỏi về dịch vụ của DuyKhanh nhé!</div>
-        </div>
-        <div class="chatbot-input">
-            <input id="chat-input" type="text" placeholder="Nhập câu hỏi..." maxlength="300" autocomplete="off">
-            <button id="chat-send"><i class="fas fa-paper-plane"></i></button>
-        </div>
-    </div>
-
-    <!-- Custom Cursor -->
-    <div id="cursor-dot"></div>
-    <div id="cursor-ring"></div>
 </body>
 </html>
