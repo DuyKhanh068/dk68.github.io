@@ -1,84 +1,63 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <!-- viewport tối ưu mobile, tắt zoom tự động để tránh giật lag -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <!-- Tăng tốc render trên mobile Chrome -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
-    <link rel="shortcut icon" href="assets/avt.webp" type="image/webp">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link rel="shortcut icon" href="assets/avt.png" type="image/x-icon">
     <title>DuyKhanh | Profile</title>
-
-    <!-- Preconnect chỉ những host thực sự cần -->
+    
+    <link rel="stylesheet" href="assets/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rowdies:wght@400;700&family=Rubik:wght@400;700&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <!-- DNS prefetch cho API -->
-    <link rel="dns-prefetch" href="https://ipinfo.io">
-    <link rel="dns-prefetch" href="https://ipwho.is">
-    <link rel="dns-prefetch" href="https://api.open-meteo.com">
-    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
-
-    <!-- Google Fonts: chỉ load 2 font cần thiết thay vì 6 font — giảm ~60% thời gian load font -->
-    <link href="https://fonts.googleapis.com/css2?family=Rowdies:wght@400;700&family=Rubik:wght@400;600;700&display=swap" rel="stylesheet">
-
-    <!-- CSS chính -->
-    <link rel="stylesheet" href="assets/style.css" />
-
-    <!-- Font Awesome: preload non-blocking -->
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
-
-    <!-- SEO & OG Meta -->
-    <meta name="description" content="Website cá nhân của DuyKhanh - Developer, thiết kế web và các dịch vụ MXH.">
-    <meta name="author" content="DuyKhanh">
-    <meta property="og:title" content="DuyKhanh | Profile">
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Rowdies:wght@400;700&family=Rubik:wght@400;700&family=Teko:wght@700&family=ZCOOL+QingKe+HuangYou&display=swap" rel="stylesheet">
+    
+    <meta name="author" content="Đây Là Website Của DUYKHANH-Dev, Rất Mong Được Chào Đón Bạn !">
+    <meta property="og:title" content="HELLO EVERYONE !">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://duykhanh068.github.io/dk68.github.io/">
+    <meta property="og:url" content="https://duykhanh068.github.io/dk68.github.io/"> 
     <meta property="og:image" content="https://duykhanh068.github.io/dk68.github.io/assets/avt.webp">
     <meta property="og:image:width" content="120">
     <meta property="og:image:height" content="120">
-    <meta property="og:site_name" content="DuyKhanh68">
-    <meta name="theme-color" content="#00FFFF" />
-
-    <!-- Preload avatar để tải ngay từ đầu -->
-    <link rel="preload" href="assets/avt.webp" as="image">
+    <meta property="og:site_name" content="DuyKhanh06">
+    <meta name="theme-color" content="#00FFFF" /> 
+   
 </head>
 
-<body class="Border">
+<body class="Border" onload="onCreate()">
     <div id="background-layer"></div>
     <div class="overlay-dim"></div>
 
     <div class="BlurWebs">
         <div class="Topnav">
             <a class="Active" href="javascript:void(0)">HOME</a>
-            <a style="color:cyan;"><span id="fps">--</span> FPS</a>
-            <a style="float:right;color:#f1c40f;cursor:default;min-width:140px;text-align:right;">
-                <i class="fas fa-temperature-high"></i>
-                <span id="weather_loc" style="color:#00FFFF;margin-right:4px;">...</span>:
-                <span id="weather_temp" style="display:inline-block;min-width:18px;transition:opacity 0.25s;">--</span>
+            <a style="color:cyan;"><span id="fps">144.0</span> FPS</a>
+            <a style="float: right; color: #f1c40f; cursor: default; min-width: 160px; text-align: right; transition: all 0.5s;">
+                <i class="fas fa-temperature-high"></i> 
+                <span id="weather_loc" style="color: #00FFFF; margin-right: 5px;">...</span>: 
+                <span id="weather_temp" style="display: inline-block; min-width: 20px; transition: opacity 0.3s;">--</span>
             </a>
         </div>
-
+        
         <br>
-        <p style="text-align:center;">
-            <!-- fetchpriority=high + loading=eager để avatar load nhanh nhất -->
-            <img class="Blob" src="assets/avt.webp" width="130" height="130" alt="Avatar DuyKhanh" fetchpriority="high" loading="eager" decoding="async">
+        <p style="text-align: center;">
+            <img class="Blob" src="assets/avt.webp" width="96" height="96" alt="Avatar">
         </p>
-        <h2 class="NameFtDuyKhanh" style="text-align:center;">Duy Khánh <i class="fa fa-check-circle"></i></h2>
+        <h2 class="NameFtDuyKhanh" style="text-align: center;">Duy Khánh <i class="fa fa-check-circle"></i></h2>
         <h2 class="TieuSu"><span class="contentLetter"></span></h2>
         <br>
-
-        <strong style="color:rgb(255,238,0);font-size:18px;font-family:'Rowdies',sans-serif;">Your Info <a id="checkip_address">Loading...</a></strong>
+        
+        <strong style="color: rgb(255, 238, 0); font-size: 19px; font-family: 'Rowdies';">Your Info <a id="checkip_address">Loading your address....</a></strong>
         <br>
-        <strong style="color:rgb(255,0,0);font-size:19px;font-family:'Rowdies',sans-serif;">Date Created:</strong>
-        <span id="momk" style="color:rgb(0,240,120);animation:colorRotate 3s linear infinite;font-size:15px;font-family:'Rowdies',sans-serif;"></span>
+        <strong style="color: rgb(255, 0, 0); font-size: 20px; font-family: 'Rowdies';">Date Created:</strong>
+        <span id="momk" style="color: rgb(0, 240, 120); animation: colorRotate 2.5s linear 0s infinite; font-size: 16px; font-family: 'Rowdies';"></span>
         <br>
-
+        
         <hr class="New"><br>
-
-        <h2 class="NameFtDuyKhanh" style="text-align:center;">Social Network</h2>
+        
+        <h2 class="NameFtDuyKhanh" style="text-align: center;">Social Network</h2>
         <div class="icons">
             <br>
             <div class="MangXaHoiFtDuyKhanh">
@@ -90,8 +69,8 @@
         </div>
         <br>
         <hr class="New"><br>
-
-        <h2 class="NameFtDuyKhanh" style="text-align:center;">DV MXH</h2>
+        
+        <div class="NameFtDuyKhanh"><h2>DV MXH</h2></div>
         <div class="ThongTinThanhToan">
             <p class="ThongTinThanhToanTitle">HOÀN TIỀN CHPLAY, APPSTORE</p>
             <p class="ThongTinThanhToanText">Hỗ trợ hoàn tiền giao dịch tự động siêu nhanh, tỷ lệ thành công cao</p>
@@ -104,18 +83,18 @@
         <br>
         <div class="ThongTinThanhToan">
             <p class="ThongTinThanhToanTitle">CRACK WINDOW</p>
-            <p class="ThongTinThanhToanText">Active Win, Office,...vv</p>
+            <p class="ThongTinThanhToanText">Active Win,Office,...vv</p>
         </div>
         <br><br>
-
+        
         <hr class="ThanhGachNgang">
         <br><br>
-
+        
         <section id="skills">
             <div class="container skills">
                 <div class="row">
                     <div class="col-12">
-                        <h2 class="NameFtDuyKhanh" style="text-align:center;">- Skill Language -</h2>
+                        <u class="NameFtDuyKhanh">- Skill Language -</u>
                     </div>
                 </div>
             </div>
@@ -126,7 +105,7 @@
                         <div class="skill-bar"><div class="skill-per color1" per="76"></div></div>
                     </div>
                     <div class="skill">
-                        <div class="skill-name">MySQL</div>
+                        <div class="skill-name">MySql</div>
                         <div class="skill-bar"><div class="skill-per color2" per="9"></div></div>
                     </div>
                 </div>
@@ -145,32 +124,33 @@
             </div>
         </section>
         <br>
-
+        
         <hr class="ThanhGachNgang">
-
+        
         <footer class="Cuoi Trang">
-            <p class="rainbow copyright">Created by
-                <a style="text-decoration:none;" href="https://www.facebook.com/profile.php?id=100084065153231" target="_blank" rel="noopener noreferrer">
+            <p class="rainbow copyright">Created by 
+                <a style="text-decoration: none;" href="https://www.facebook.com/profile.php?id=100084065153231" target="_blank" rel="noopener noreferrer">
                     <font class="rainbow" color="white"> DuyKhanh</font>
                 </a>
-                <br><strong>All rights reserved - © 2025</strong>
+                <br> <strong>All rights reserved - © 2025</strong>
             </p>
         </footer>
     </div>
 
     <div id="notification" class="notification">
-        <div class="notification-icon"><i class="fas fa-bell"></i></div>
+        <div class="notification-icon">
+            <i class="fas fa-bell"></i>
+        </div>
         <h2>Chào mừng!</h2>
         <p>Rất vui được gặp bạn tại không gian của Duy Khánh 💻</p>
         <button class="button1" onclick="hideNotification()">
-            <i class="fas fa-headphones-alt" style="margin-right:7px;"></i>Khám phá ngay
+            <i class="fas fa-headphones-alt" style="margin-right: 8px;"></i>Khám phá ngay
         </button>
     </div>
 
-    <audio id="myAudio" preload="none"></audio>
+    <audio id="myAudio"></audio>
     <div id="Toast">Designed by DuyKhanh :))</div>
 
-    <!-- defer: không block render, chạy sau khi HTML parse xong -->
     <script src="assets/main.js" defer></script>
 </body>
 </html>
