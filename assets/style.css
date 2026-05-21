@@ -1,6 +1,5 @@
 /* ==================== RESET & BASE ==================== */
-
-* {
+*, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -9,35 +8,33 @@
 
 body {
     position: relative;
-    scroll-behavior: smooth;
-    font-family: 'Rubik', 'ZCOOL QingKe HuangYou', sans-serif;
+    font-family: 'Rubik', sans-serif;
     background: #0a0a0f;
     color: #e0e0e0;
     overflow-y: scroll;
+    /* scroll-behavior: smooth tốn CPU trên thiết bị yếu */
 }
 
 /* ==================== BACKGROUND FIXED LAYERS ==================== */
 #background-layer {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     z-index: -9999;
     background-image: url('LINK_ANH_CUA_BAN.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    /* will-change chỉ dùng 1 lần, tránh lãng phí VRAM */
+    will-change: transform;
     transform: translateZ(0);
 }
 
 .overlay-dim {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(5, 5, 15, 0.7);
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(5, 5, 15, 0.72);
     z-index: -9998;
     pointer-events: none;
 }
@@ -45,110 +42,91 @@ body {
 .BlurWebs {
     position: relative;
     z-index: 1;
-    animation: fadeIn 1.5s ease forwards;
+    animation: fadeIn 1s ease forwards;
     contain: layout style;
 }
 
 /* ==================== BORDER & SCROLLBAR ==================== */
 .Border {
-    font-size: 12px;
+    font-size: 13px;
     position: relative;
     min-height: 100%;
     box-sizing: border-box;
-    background-color: rgba(10, 10, 18, 0.85);
+    background-color: rgba(10, 10, 18, 0.88);
     text-align: center;
     padding: 0;
-    margin: 8px;
-    border: 1px solid rgba(0, 255, 255, 0.15);
-    border-radius: 16px;
-    animation: borderGlow 6s ease-in-out infinite;
-    box-shadow: 0 0 30px rgba(0, 255, 255, 0.05) inset;
+    margin: 6px;
+    border: 1px solid rgba(0, 255, 255, 0.18);
+    border-radius: 14px;
+    /* borderGlow animation loại bỏ — tốn GPU liên tục */
 }
 
-::-webkit-scrollbar {
-    width: 6px;
-}
-
-::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.03);
-}
-
-::-webkit-scrollbar-thumb {
-    background: rgba(0, 255, 255, 0.3);
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 255, 255, 0.5);
-}
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); }
+::-webkit-scrollbar-thumb { background: rgba(0,255,255,0.28); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,255,255,0.48); }
 
 /* ==================== TOPNAV ==================== */
 .Topnav {
     overflow: hidden;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    /* backdrop-filter nặng — chỉ dùng trên thiết bị mạnh */
 }
-
+@media (min-width: 768px) and (hover: hover) {
+    .Topnav { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+}
 .Topnav a {
     font-family: 'Rubik', sans-serif;
     float: left;
     display: block;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255,255,255,0.6);
     text-align: center;
-    padding: 14px 16px;
+    padding: 12px 14px;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.4px;
     text-transform: uppercase;
     border-bottom: 2px solid transparent;
-    transition: color 0.3s ease, border-color 0.3s ease;
+    transition: color 0.2s, border-color 0.2s;
 }
-
-.Topnav a:hover {
-    color: #00ffff;
-    border-bottom: 2px solid rgba(0, 255, 255, 0.5);
-}
-
-.Topnav a.Active {
-    color: #00ffff;
-    border-bottom: 2px solid #00ffff;
-}
+.Topnav a:hover { color: #00ffff; border-bottom-color: rgba(0,255,255,0.5); }
+.Topnav a.Active { color: #00ffff; border-bottom: 2px solid #00ffff; }
 
 /* ==================== AVATAR & TITLES ==================== */
 .Blob {
     border-radius: 50%;
     margin: 10px;
-    height: 150px;
-    width: 150px;
-    background: rgba(15, 20, 40, 0.6);
-    box-sizing: border-box;
+    height: 130px;
+    width: 130px;
     overflow: hidden;
-    box-shadow:
-        0 0 20px rgba(0, 255, 255, 0.15),
-        0 0 60px rgba(0, 255, 255, 0.05);
-    animation: fadeIn 1.5s ease forwards, pulse 4s ease-in-out infinite;
-    border: 2px solid rgba(0, 255, 255, 0.2);
+    border: 2px solid rgba(0,255,255,0.22);
+    box-shadow: 0 0 18px rgba(0,255,255,0.13);
+    animation: fadeIn 1s ease forwards;
+    /* pulse animation loại bỏ — thay bằng CSS hover nhẹ hơn */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.Blob:hover {
+    transform: scale(1.04);
+    box-shadow: 0 0 28px rgba(0,255,255,0.22);
 }
 
 .NameFtDuyKhanh {
-    color: #ffffff;
+    color: #fff;
     padding: 0;
-    font-size: 22px;
+    font-size: 20px;
     line-height: 1.8;
     margin-bottom: 0;
     font-family: 'Rowdies', sans-serif;
-    text-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
-    letter-spacing: 0.5px;
+    text-shadow: 0 0 12px rgba(0,255,255,0.25);
+    letter-spacing: 0.4px;
 }
 
 .TieuSu {
     text-align: center;
-    color: rgba(255, 255, 255, 0.85);
-    font-size: 20px;
+    color: rgba(255,255,255,0.85);
+    font-size: 18px;
     font-weight: 400;
-    text-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
 }
 
 .contentLetter {
@@ -159,141 +137,64 @@ body {
 
 /* ==================== SOCIAL BUTTONS ==================== */
 .MangXaHoiFtDuyKhanh div {
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255,255,255,0.1);
     border-radius: 12px;
     color: white;
-    padding: 13px 24px;
+    padding: 12px 20px;
     cursor: pointer;
-    width: 65%;
+    width: 70%;
     margin: auto;
-    font-size: 16px;
+    font-size: 15px;
     font-family: 'Rubik', sans-serif;
-    letter-spacing: 0.3px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    letter-spacing: 0.2px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
     text-align: center;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.9), 0 2px 4px rgba(0, 0, 0, 0.6), 0 4px 10px rgba(0, 0, 0, 0.4);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
 }
+.MangXaHoiFtDuyKhanh div:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.2); }
+.MangXaHoiFtDuyKhanh div:active { transform: translateY(1px); }
+.MangXaHoiFtDuyKhanh a { text-decoration: none; }
+.MangXaHoiFtDuyKhanh div i { display: inline-block; margin-right: 7px; }
 
-.MangXaHoiFtDuyKhanh div:hover {
-    transform: translateY(-3px);
-    border-color: rgba(255, 255, 255, 0.2);
-}
-
-.MangXaHoiFtDuyKhanh div:active {
-    transform: translateY(1px);
-}
-
-.MangXaHoiFtDuyKhanh a {
-    text-decoration: none;
-}
-
-.MangXaHoiFtDuyKhanh div i {
-    display: inline-block;
-    margin-right: 8px;
-    transition: transform 0.3s ease;
-}
-
-.MangXaHoiFtDuyKhanh div:hover i {
-    transform: scale(1.15);
-}
-
+/* gradient animation chỉ chạy trên thiết bị có hover (desktop/laptop) */
 @keyframes gradientAnimation {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
-.TikTok,
-.Facebook,
-.Github,
-.YouTube {
+.TikTok, .Facebook, .Github, .YouTube {
     position: relative;
     border-radius: 12px;
     font-size: 1rem;
     text-align: center;
     display: block;
-    margin: 10px;
-    padding: 13px 10px;
+    margin: 8px;
+    padding: 12px 10px;
     text-decoration: none;
     -webkit-tap-highlight-color: transparent;
-    color: #ffffff !important;
+    color: #fff !important;
     font-weight: 600;
     background-size: 200% 200%;
-    animation: gradientAnimation 5s ease infinite;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255,255,255,0.08);
 }
 
-.TikTok {
-    background-image: linear-gradient(45deg, #111111, #1aa8a3, #b8234a, #111111);
-    box-shadow:
-        0 4px 16px rgba(37, 244, 238, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08),
-        inset 0 -1px 3px rgba(0, 0, 0, 0.25);
+/* Chỉ chạy gradient animation trên desktop có hover — tiết kiệm pin mobile */
+@media (hover: hover) {
+    .TikTok, .Facebook, .Github, .YouTube {
+        animation: gradientAnimation 6s ease infinite;
+    }
 }
 
-.TikTok:hover {
-    box-shadow:
-        0 6px 24px rgba(37, 244, 238, 0.3),
-        0 0 12px rgba(37, 244, 238, 0.12),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    border-color: rgba(37, 244, 238, 0.35);
-}
+.TikTok  { background-image: linear-gradient(45deg, #111, #1aa8a3, #b8234a, #111); box-shadow: 0 3px 12px rgba(37,244,238,0.12); }
+.Facebook{ background-image: linear-gradient(45deg, #1565c0, #2979d6, #0d8de8); box-shadow: 0 3px 12px rgba(24,119,242,0.15); }
+.Github  { background-image: linear-gradient(45deg, #1a1e24, #2b3038, #5a3d7a); box-shadow: 0 3px 12px rgba(110,84,148,0.12); }
+.YouTube { background-image: linear-gradient(45deg, #cc1a1a, #a31818, #e83030); box-shadow: 0 3px 12px rgba(255,0,0,0.12); }
 
-.Facebook {
-    background-image: linear-gradient(45deg, #1565c0, #2979d6, #0d8de8);
-    box-shadow:
-        0 4px 16px rgba(24, 119, 242, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08),
-        inset 0 -1px 3px rgba(0, 0, 0, 0.25);
-}
-
-.Facebook:hover {
-    box-shadow:
-        0 6px 24px rgba(24, 119, 242, 0.4),
-        0 0 12px rgba(24, 119, 242, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    border-color: rgba(24, 119, 242, 0.35);
-}
-
-.Github {
-    background-image: linear-gradient(45deg, #1a1e24, #2b3038, #5a3d7a, #2b3038);
-    box-shadow:
-        0 4px 16px rgba(110, 84, 148, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.06),
-        inset 0 -1px 3px rgba(0, 0, 0, 0.3);
-}
-
-.Github:hover {
-    box-shadow:
-        0 6px 24px rgba(110, 84, 148, 0.3),
-        0 0 12px rgba(110, 84, 148, 0.12),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    border-color: rgba(110, 84, 148, 0.35);
-}
-
-.YouTube {
-    background-image: linear-gradient(45deg, #cc1a1a, #a31818, #e83030);
-    box-shadow:
-        0 4px 16px rgba(255, 0, 0, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08),
-        inset 0 -1px 3px rgba(0, 0, 0, 0.25);
-}
-
-.YouTube:hover {
-    box-shadow:
-        0 6px 24px rgba(255, 0, 0, 0.35),
-        0 0 12px rgba(255, 0, 0, 0.12),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 50, 50, 0.35);
-}
+.TikTok:hover   { box-shadow: 0 6px 20px rgba(37,244,238,0.25); border-color: rgba(37,244,238,0.3); }
+.Facebook:hover { box-shadow: 0 6px 20px rgba(24,119,242,0.3); border-color: rgba(24,119,242,0.3); }
+.Github:hover   { box-shadow: 0 6px 20px rgba(110,84,148,0.25); border-color: rgba(110,84,148,0.3); }
+.YouTube:hover  { box-shadow: 0 6px 20px rgba(255,0,0,0.28); border-color: rgba(255,50,50,0.3); }
 
 /* ==================== SERVICE CARDS ==================== */
 .ThongTinThanhToan {
@@ -301,375 +202,212 @@ body {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    background: rgba(20, 25, 35, 0.8);
-    padding: 18px;
-    border-radius: 14px;
-    border: 1px solid rgba(0, 255, 255, 0.1);
-    box-shadow:
-        0 4px 20px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.04);
-    color: #ffffff;
-    width: 80%;
-    margin: 10px auto;
-    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    background: rgba(20,25,35,0.82);
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,255,255,0.1);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.28);
+    color: #fff;
+    width: 85%;
+    margin: 8px auto;
+    transition: transform 0.2s ease, border-color 0.2s ease;
 }
-
 .ThongTinThanhToan:hover {
     transform: translateY(-2px);
-    border-color: rgba(0, 255, 255, 0.25);
-    box-shadow:
-        0 8px 30px rgba(0, 0, 0, 0.4),
-        0 0 15px rgba(0, 255, 255, 0.05),
-        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    border-color: rgba(0,255,255,0.22);
 }
-
 .ThongTinThanhToanTitle {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
     color: #00FFFF;
     margin: 0;
     font-family: 'Rowdies', sans-serif;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.4px;
 }
-
 .ThongTinThanhToanText {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 400;
-    color: rgba(0, 230, 100, 0.85);
-    margin: 6px 0 0;
+    color: rgba(0,230,100,0.88);
+    margin: 5px 0 0;
 }
 
 /* ==================== HR ==================== */
-hr.ThanhGachNgang,
-hr.New {
+hr.ThanhGachNgang, hr.New {
     border: none;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
-    margin: 0 20px;
+    background: linear-gradient(90deg, transparent, rgba(0,255,255,0.18), transparent);
+    margin: 0 16px;
 }
 
 /* ==================== FOOTER ==================== */
-.Cuoi {
-    padding: 40px 0;
-    color: #ffffff;
-}
-
+.Cuoi { padding: 36px 0; color: #fff; }
 .rainbow {
-    margin-top: 15px;
+    margin-top: 12px;
     text-align: center;
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.5);
-    animation: colorRotate 2.5s linear infinite;
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    animation: colorRotate 3s linear infinite;
 }
 
 @keyframes colorRotate {
-    0% {
-        color: rgba(255, 255, 255, 0.5);
-    }
-
-    10% {
-        color: #00FFFF;
-    }
-
-    30% {
-        color: #00CC88;
-    }
-
-    45% {
-        color: #6C63FF;
-    }
-
-    55% {
-        color: #00FFFF;
-    }
-
-    65% {
-        color: #00CC88;
-    }
-
-    75% {
-        color: #6C63FF;
-    }
-
-    85% {
-        color: #00FFFF;
-    }
-
-    100% {
-        color: rgba(255, 255, 255, 0.5);
-    }
+    0%   { color: rgba(255,255,255,0.5); }
+    25%  { color: #00FFFF; }
+    50%  { color: #00CC88; }
+    75%  { color: #6C63FF; }
+    100% { color: rgba(255,255,255,0.5); }
 }
 
 /* ==================== SKILL BARS ==================== */
-.skill-box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
-.skill {
-    width: 60%;
-    max-width: 520px;
-    padding: 0 20px;
-}
-
+.skill-box { display: flex; justify-content: center; align-items: center; flex-direction: column; }
+.skill { width: 65%; max-width: 500px; padding: 0 16px; }
 .skill-name {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 1.2px;
+    color: rgba(255,255,255,0.7);
     font-family: 'Rubik', sans-serif;
-    margin: 15px 0;
+    margin: 12px 0;
 }
-
-.skill-bar {
-    height: 8px;
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 8px;
-    overflow: hidden;
-}
-
+.skill-bar { height: 7px; background: rgba(255,255,255,0.09); border-radius: 8px; overflow: hidden; }
 .skill-per {
-    height: 8px;
+    height: 7px;
     border-radius: 8px;
     width: 0;
     position: relative;
+    /* will-change chỉ trong lúc animate, JS sẽ set/unset */
 }
-
 .skill-per::before {
     content: attr(per);
     position: absolute;
-    padding: 3px 8px;
-    background: rgba(20, 25, 40, 0.9);
-    border: 1px solid rgba(0, 255, 255, 0.2);
+    padding: 2px 7px;
+    background: rgba(20,25,40,0.92);
+    border: 1px solid rgba(0,255,255,0.2);
     color: #00ffff;
-    font-size: 11px;
+    font-size: 10px;
     font-family: 'Rubik', sans-serif;
     font-weight: 600;
-    border-radius: 6px;
-    top: -32px;
+    border-radius: 5px;
+    top: -28px;
     right: 0;
     transform: translateX(50%);
 }
-
 .skill-per::after {
     content: '';
     position: absolute;
-    width: 8px;
-    height: 8px;
-    background: rgba(20, 25, 40, 0.9);
-    border-right: 1px solid rgba(0, 255, 255, 0.2);
-    border-bottom: 1px solid rgba(0, 255, 255, 0.2);
-    top: -14px;
-    right: 0;
+    width: 7px; height: 7px;
+    background: rgba(20,25,40,0.92);
+    border-right: 1px solid rgba(0,255,255,0.2);
+    border-bottom: 1px solid rgba(0,255,255,0.2);
+    top: -11px; right: 0;
     transform: translateX(50%) rotate(45deg);
 }
-
-.color1 {
-    background: linear-gradient(90deg, #00ff88, #00cc66);
-    box-shadow: 0 0 8px rgba(0, 255, 136, 0.3);
-}
-
-.color2 {
-    background: linear-gradient(90deg, #ff6b8a, #ff4466);
-    box-shadow: 0 0 8px rgba(255, 107, 138, 0.3);
-}
-
-.color3 {
-    background: linear-gradient(90deg, #6c63ff, #5548e0);
-    box-shadow: 0 0 8px rgba(108, 99, 255, 0.3);
-}
-
-.color4 {
-    background: linear-gradient(90deg, #ffd700, #f0c000);
-    box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
-}
+.color1 { background: linear-gradient(90deg, #00ff88, #00cc66); }
+.color2 { background: linear-gradient(90deg, #ff6b8a, #ff4466); }
+.color3 { background: linear-gradient(90deg, #6c63ff, #5548e0); }
+.color4 { background: linear-gradient(90deg, #ffd700, #f0c000); }
 
 /* ==================== TOAST ==================== */
 #Toast {
     visibility: hidden;
-    min-width: 250px;
-    margin-left: -125px;
-    background: rgba(15, 20, 30, 0.9);
-    border: 1px solid rgba(0, 255, 255, 0.2);
+    min-width: 220px;
+    margin-left: -110px;
+    background: rgba(15,20,30,0.92);
+    border: 1px solid rgba(0,255,255,0.2);
     color: #00ffff;
     text-align: center;
     border-radius: 50px;
-    padding: 14px 24px;
+    padding: 12px 20px;
     position: fixed;
     z-index: 1;
     left: 50%;
-    bottom: 35px;
-    font-size: 16px;
+    bottom: 30px;
+    font-size: 15px;
     font-family: 'Rubik', sans-serif;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
 }
-
 #Toast.show {
     visibility: visible;
-    animation: fadein 2.0s, fadeout 2.0s 2.0s;
+    animation: fadein 1.8s, fadeout 1.8s 2s;
 }
 
 /* ==================== NOTIFICATION ==================== */
 .notification {
     position: fixed;
-    top: 50%;
-    left: 50%;
+    top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    width: 90%;
-    max-width: 400px;
-    background: rgba(10, 15, 25, 0.85);
-    backdrop-filter: blur(20px) saturate(150%);
-    -webkit-backdrop-filter: blur(20px) saturate(150%);
-    border: 1px solid rgba(0, 255, 255, 0.15);
-    border-radius: 24px;
-    padding: 32px 28px;
+    width: 92%;
+    max-width: 380px;
+    background: rgba(10,15,25,0.9);
+    border: 1px solid rgba(0,255,255,0.15);
+    border-radius: 20px;
+    padding: 28px 24px;
     text-align: center;
-    box-shadow:
-        0 25px 50px rgba(0, 0, 0, 0.5),
-        0 0 0 1px rgba(0, 255, 255, 0.05) inset,
-        0 0 80px rgba(0, 255, 255, 0.03);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
     z-index: 10000;
-    animation: floatIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    animation: floatIn 0.4s cubic-bezier(0.16,1,0.3,1);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    /* backdrop-filter chỉ trên thiết bị mạnh */
 }
-
-.notification-icon {
-    font-size: 44px;
-    color: #00ffff;
-    margin-bottom: 12px;
-    text-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
+@media (min-width: 600px) and (hover: hover) {
+    .notification {
+        backdrop-filter: blur(16px) saturate(140%);
+        -webkit-backdrop-filter: blur(16px) saturate(140%);
+    }
 }
-
+.notification-icon { font-size: 40px; color: #00ffff; margin-bottom: 10px; }
 .notification h2 {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 700;
-    margin: 0 0 8px;
-    color: #ffffff;
-    text-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
-    letter-spacing: 0.5px;
+    margin: 0 0 6px;
+    color: #fff;
+    letter-spacing: 0.4px;
     font-family: 'Rowdies', sans-serif;
 }
-
 .notification p {
-    font-size: 16px;
-    color: rgba(224, 242, 254, 0.8);
-    margin: 12px 0 24px;
-    line-height: 1.6;
-    font-weight: 400;
+    font-size: 15px;
+    color: rgba(224,242,254,0.82);
+    margin: 10px 0 20px;
+    line-height: 1.55;
     font-family: 'Rubik', sans-serif;
 }
-
 .button1 {
-    background: linear-gradient(135deg, rgba(0, 255, 255, 0.15), rgba(0, 114, 255, 0.25));
-    border: 1px solid rgba(0, 255, 255, 0.3);
+    background: linear-gradient(135deg, rgba(0,255,255,0.14), rgba(0,114,255,0.22));
+    border: 1px solid rgba(0,255,255,0.28);
     color: #00ffff;
     font-weight: 600;
-    padding: 12px 32px;
+    padding: 11px 28px;
     border-radius: 60px;
     cursor: pointer;
-    box-shadow: 0 4px 20px rgba(0, 255, 255, 0.1);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.3s ease, border-color 0.3s ease;
-    letter-spacing: 1px;
+    box-shadow: 0 3px 16px rgba(0,255,255,0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    letter-spacing: 0.8px;
     text-transform: uppercase;
     font-family: 'Rubik', sans-serif;
-    font-size: 14px;
-    backdrop-filter: blur(4px);
+    font-size: 13px;
 }
-
 .button1:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(0, 255, 255, 0.2);
-    background: linear-gradient(135deg, rgba(0, 255, 255, 0.25), rgba(0, 114, 255, 0.35));
-    border-color: rgba(0, 255, 255, 0.5);
+    box-shadow: 0 7px 24px rgba(0,255,255,0.18);
+    border-color: rgba(0,255,255,0.45);
 }
-
-.button1:active {
-    transform: translateY(1px);
-    box-shadow: 0 2px 10px rgba(0, 255, 255, 0.15);
-}
+.button1:active { transform: translateY(1px); }
 
 /* ==================== ANIMATIONS ==================== */
 @keyframes floatIn {
-    0% {
-        opacity: 0;
-        transform: translate(-50%, -45%) scale(0.95);
-    }
-
-    100% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-    }
+    0%   { opacity: 0; transform: translate(-50%, -46%) scale(0.95); }
+    100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
-
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-        box-shadow: 0 0 20px rgba(0, 255, 255, 0.15), 0 0 60px rgba(0, 255, 255, 0.05);
-    }
-
-    50% {
-        transform: scale(1.05);
-        box-shadow: 0 0 30px rgba(0, 255, 255, 0.2), 0 0 80px rgba(0, 255, 255, 0.08);
-    }
-
-    100% {
-        transform: scale(1);
-        box-shadow: 0 0 20px rgba(0, 255, 255, 0.15), 0 0 60px rgba(0, 255, 255, 0.05);
-    }
-}
-
-@keyframes borderGlow {
-
-    0%,
-    100% {
-        border-color: rgba(0, 255, 255, 0.1);
-    }
-
-    33% {
-        border-color: rgba(0, 200, 255, 0.2);
-    }
-
-    66% {
-        border-color: rgba(100, 100, 255, 0.15);
-    }
-}
-
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
-
 @keyframes fadein {
-    from {
-        bottom: 0;
-        opacity: 0;
-    }
-
-    to {
-        bottom: 35px;
-        opacity: 1;
-    }
+    from { bottom: 0; opacity: 0; }
+    to   { bottom: 30px; opacity: 1; }
 }
-
 @keyframes fadeout {
-    from {
-        bottom: 35px;
-        opacity: 1;
-    }
-
-    to {
-        bottom: 0;
-        opacity: 0;
-    }
+    from { bottom: 30px; opacity: 1; }
+    to   { bottom: 0; opacity: 0; }
 }
 
 /* ==================== IP ELEMENT ==================== */
@@ -678,51 +416,50 @@ hr.New {
     user-select: none;
     display: inline-flex;
     align-items: center;
-    transition: opacity 0.3s ease, transform 0.3s ease !important;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+#checkip_address:hover { transform: translateY(-1px); }
+
+/* ==================== RESPONSIVE MOBILE ==================== */
+@media (max-width: 600px) {
+    .Border { margin: 3px; border-radius: 10px; }
+    .BlurWebs { font-size: 13px; }
+    .Blob { height: 110px; width: 110px; }
+    .NameFtDuyKhanh { font-size: 18px; }
+    .TieuSu { font-size: 15px; }
+    .MangXaHoiFtDuyKhanh div { width: 88%; font-size: 14px; padding: 11px 14px; }
+    .ThongTinThanhToan { width: 92%; padding: 14px; }
+    .ThongTinThanhToanTitle { font-size: 16px; }
+    .ThongTinThanhToanText { font-size: 13px; }
+    .skill { width: 85%; }
+    .notification { padding: 22px 16px; border-radius: 16px; }
+    .notification h2 { font-size: 19px; }
+    .notification p  { font-size: 14px; }
+    .button1 { padding: 10px 22px; font-size: 12px; }
+    .Topnav a { padding: 10px 10px; font-size: 12px; }
+    #Toast { min-width: 180px; margin-left: -90px; font-size: 13px; padding: 10px 16px; }
 }
 
-#checkip_address:hover {
-    transform: translateY(-2px);
-    text-shadow: 0 0 10px currentColor;
+@media (max-width: 380px) {
+    .Blob { height: 90px; width: 90px; }
+    .NameFtDuyKhanh { font-size: 16px; }
+    .MangXaHoiFtDuyKhanh div { width: 95%; }
+    .ThongTinThanhToan { width: 96%; }
+    .skill { width: 94%; }
 }
 
-#checkip_address i {
-    transition: transform 0.3s ease;
-}
-
-#checkip_address:hover i {
-    transform: scale(1.2);
-}
-
-/* ==================== RESPONSIVE ==================== */
-@media (max-width: 480px) {
-    .notification {
-        padding: 24px 20px;
-        border-radius: 20px;
-    }
-
-    .notification h2 {
-        font-size: 22px;
-    }
-
-    .notification p {
-        font-size: 15px;
-    }
-
-    .button1 {
-        padding: 11px 24px;
-        font-size: 13px;
-    }
-}
-
-/* ==================== REDUCE MOTION ==================== */
+/* ==================== REDUCE MOTION (thiết bị yếu / người dùng yêu cầu) ==================== */
 @media (prefers-reduced-motion: reduce) {
-
-    *,
-    *::before,
-    *::after {
+    *, *::before, *::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
     }
+}
+
+/* ==================== LOW-END DEVICE (save-data mode) ==================== */
+@media (prefers-reduced-data: reduce) {
+    #background-layer { background-image: none !important; }
+    .TikTok, .Facebook, .Github, .YouTube { animation: none !important; }
+    .rainbow { animation: none !important; color: #00FFFF; }
 }
