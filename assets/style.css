@@ -526,6 +526,99 @@ hr.ThanhGachNgang, hr.New {
 }
 
 /* ==================== HERO SECTION ==================== */
+.hero-section { margin:16px auto; padding:28px 20px 20px; max-width:520px; background:rgba(8,12,28,0.6); border:1px solid rgba(0,255,255,0.14); border-radius:20px; box-shadow:0 8px 36px rgba(0,0,0,0.4); animation:fadeIn 0.8s ease forwards; }
+.avatar-ring { display:inline-block; padding:3px; border-radius:50%; background:conic-gradient(#00ffff 0%,#6c63ff 33%,#00cc88 66%,#00ffff 100%); animation:ringRotate 5s linear infinite; margin:8px auto; vertical-align:middle; }
+@keyframes ringRotate { to { transform:rotate(360deg); } }
+.hero-role { font-size:12px; color:rgba(0,255,255,0.6); letter-spacing:2.5px; text-transform:uppercase; margin:2px 0 10px; font-family:'Rubik',sans-serif; }
+.hero-meta { display:inline-block; background:rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:10px 18px; margin:10px 0; font-size:13px; line-height:1.9; }
+.hero-social-title { font-size:15px; font-family:'Rowdies',sans-serif; color:rgba(255,255,255,0.6); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:6px; font-weight:400; }
+
+/* ==================== SKILL ICONS ==================== */
+.skill-name { display:flex; align-items:center; justify-content:space-between; }
+.skill-icon { font-size:16px; margin-right:8px; flex-shrink:0; }
+.skill-pct { font-size:11px; font-weight:600; color:rgba(0,255,255,0.7); font-family:'Rubik',sans-serif; flex-shrink:0; margin-left:auto; padding-left:8px; }
+.skill-per::before, .skill-per::after { display:none; }
+
+/* ==================== SCROLL PROGRESS ==================== */
+#scroll-progress { position:fixed; top:0; left:0; z-index:99999; height:3px; width:0%; background:linear-gradient(90deg,#00ffff,#6c63ff,#00cc88); pointer-events:none; transition:width 0.08s linear; }
+
+/* ==================== STATS ==================== */
+.stats-section { display:flex; justify-content:center; gap:16px; padding:12px 10px; flex-wrap:wrap; }
+.stat-item { text-align:center; min-width:76px; padding:14px 18px; background:rgba(0,255,255,0.05); border:1px solid rgba(0,255,255,0.12); border-radius:14px; transition:transform 0.2s,border-color 0.2s; contain:layout style; }
+.stat-item:hover { transform:translateY(-3px); border-color:rgba(0,255,255,0.3); }
+.stat-num { font-size:28px; font-weight:700; color:#00ffff; font-family:'Rubik',sans-serif; }
+.stat-unit { font-size:16px; color:#00ffff; font-weight:600; }
+.stat-label { font-size:12px; color:rgba(255,255,255,0.55); margin-top:4px; }
+
+/* ==================== FLOATING CONTACT ==================== */
+#float-contact { position:fixed; bottom:24px; right:18px; z-index:9000; display:flex; flex-direction:column; align-items:center; gap:9px; }
+#float-btn { width:52px; height:52px; border-radius:50%; background:linear-gradient(135deg,#00ffff,#6c63ff); border:none; cursor:pointer; color:#050510; font-size:20px; box-shadow:0 4px 20px rgba(0,255,255,0.4); transition:transform 0.25s,box-shadow 0.25s; touch-action:manipulation; }
+#float-btn:hover { transform:scale(1.1) rotate(15deg); box-shadow:0 6px 28px rgba(0,255,255,0.55); }
+.float-menu { display:flex; flex-direction:column; align-items:center; gap:8px; }
+.float-item { width:42px; height:42px; border-radius:50%; background:rgba(12,18,35,0.95); border:1px solid rgba(0,255,255,0.2); color:#00ffff; font-size:16px; display:flex; align-items:center; justify-content:center; text-decoration:none; cursor:pointer; box-shadow:0 2px 12px rgba(0,0,0,0.4); touch-action:manipulation; opacity:0; transform:scale(0.5) translateY(16px); pointer-events:none; transition:opacity 0.18s calc(var(--i,1)*0.06s),transform 0.18s calc(var(--i,1)*0.06s); }
+.float-item:hover { background:rgba(0,255,255,0.15); }
+#float-contact.open .float-item { opacity:1; transform:scale(1) translateY(0); pointer-events:all; }
+
+/* ==================== CHATBOT ==================== */
+#chatbot { position:fixed; bottom:86px; right:18px; z-index:9500; width:300px; max-width:calc(100vw - 32px); background:rgba(8,12,28,0.97); border:1px solid rgba(0,255,255,0.18); border-radius:16px; box-shadow:0 16px 50px rgba(0,0,0,0.6); display:none; flex-direction:column; overflow:hidden; }
+#chatbot.open { display:flex; animation:floatIn 0.3s ease; }
+.chatbot-header { display:flex; justify-content:space-between; align-items:center; padding:11px 16px; background:rgba(0,255,255,0.07); border-bottom:1px solid rgba(0,255,255,0.1); font-family:'Rowdies',sans-serif; font-size:13px; color:#fff; }
+.chat-status { font-size:10px; color:#00ff88; margin-left:8px; font-family:'Rubik',sans-serif; }
+#close-chat { background:none; border:none; color:rgba(255,255,255,0.5); cursor:pointer; font-size:14px; padding:4px; transition:color 0.2s; }
+#close-chat:hover { color:#fff; }
+#chat-messages { flex:1; padding:12px; overflow-y:auto; max-height:250px; display:flex; flex-direction:column; gap:8px; font-size:13px; font-family:'Rubik',sans-serif; }
+.bot-msg,.user-msg { padding:8px 12px; border-radius:12px; max-width:88%; line-height:1.5; word-break:break-word; }
+.bot-msg { background:rgba(0,255,255,0.08); border:1px solid rgba(0,255,255,0.12); color:#e0e0e0; align-self:flex-start; }
+.user-msg { background:rgba(0,255,255,0.15); border:1px solid rgba(0,255,255,0.2); color:#fff; align-self:flex-end; }
+.typing span { display:inline-block; width:6px; height:6px; background:#00ffff; border-radius:50%; margin:0 2px; animation:typingDot 1s infinite; }
+.typing span:nth-child(2){animation-delay:0.2s;} .typing span:nth-child(3){animation-delay:0.4s;}
+@keyframes typingDot { 0%,60%,100%{transform:translateY(0);} 30%{transform:translateY(-6px);} }
+.chatbot-input { display:flex; padding:10px 12px; gap:8px; border-top:1px solid rgba(255,255,255,0.06); }
+#chat-input { flex:1; background:rgba(255,255,255,0.06); border:1px solid rgba(0,255,255,0.15); border-radius:20px; color:#fff; padding:8px 14px; font-size:13px; font-family:'Rubik',sans-serif; outline:none; }
+#chat-input:focus { border-color:rgba(0,255,255,0.35); }
+#chat-send { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,rgba(0,255,255,0.2),rgba(0,114,255,0.3)); border:1px solid rgba(0,255,255,0.3); color:#00ffff; cursor:pointer; font-size:13px; transition:transform 0.2s; touch-action:manipulation; flex-shrink:0; }
+#chat-send:hover { transform:scale(1.1); }
+
+/* ==================== CUSTOM CURSOR ==================== */
+#cursor-dot,#cursor-ring { position:fixed; pointer-events:none; border-radius:50%; z-index:99998; display:none; }
+#cursor-dot { width:6px; height:6px; background:#00ffff; transform:translate(-50%,-50%); }
+#cursor-ring { width:28px; height:28px; border:1.5px solid rgba(0,255,255,0.5); transform:translate(-50%,-50%); transition:width 0.2s,height 0.2s,border-color 0.2s; }
+body.cur-on #cursor-dot,body.cur-on #cursor-ring { display:block; }
+body.cur-on * { cursor:none !important; }
+#cursor-ring.hov { width:44px; height:44px; border-color:rgba(0,255,255,0.85); }
+
+/* ==================== PARTICLE CANVAS ==================== */
+#particle-canvas { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-9997; pointer-events:none; opacity:0.35; }
+
+/* ==================== VISUALIZER ==================== */
+#visualizer-wrap { width:90%; max-width:480px; margin:10px auto; border-radius:10px; overflow:hidden; background:rgba(0,0,0,0.25); display:none; }
+#visualizer-canvas { width:100%; display:block; }
+
+/* Responsive */
+@media (max-width:600px) {
+    .hero-section{margin:8px;padding:20px 14px 16px;border-radius:16px;}
+    .Blob{height:110px;width:110px;}
+    .hero-meta{padding:8px 12px;font-size:12px;}
+    .skill-icon{font-size:14px;}
+    #chatbot{width:calc(100vw - 32px);right:16px;}
+    #float-contact{bottom:16px;right:14px;}
+    .stat-num{font-size:22px;}
+}
+@media (max-width:380px) {
+    .Blob{height:90px;width:90px;}
+    .stats-section{gap:10px;}
+    .stat-item{padding:10px 12px;min-width:64px;}
+}
+@media (prefers-reduced-motion:reduce) {
+    *,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;}
+}
+@media (max-width:480px) {
+    .bg-blob{filter:blur(50px);}
+    .bg-blob3{display:none;}
+}
+
+
+/* ==================== HERO SECTION ==================== */
 .hero-section {
     margin: 16px auto;
     padding: 28px 20px 20px;

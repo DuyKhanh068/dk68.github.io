@@ -80,7 +80,7 @@ function playMusic() {
     const audio = document.getElementById("myAudio");
     if (!audio) return;
     audio.src = getRandomAudio();
-    audio.play().catch(() => {});
+    audio.play().catch(e => console.warn('🎵 Music play failed (kiểm tra thư mục music/):', e.message));
     audio.onended = playMusic;
 }
 
@@ -419,3 +419,148 @@ document.addEventListener('click', e => {
 document.addEventListener('touchstart', () => {}, { passive: true });
 document.addEventListener('touchmove',  () => {}, { passive: true });
 document.addEventListener('wheel',      () => {}, { passive: true });
+
+// ===== SCROLL PROGRESS =====
+const scrollBar = document.getElementById('scroll-progress');
+if (scrollBar) {
+    document.addEventListener('scroll', () => {
+        const sc = document.documentElement.scrollTop;
+        const sh = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        scrollBar.style.width = (sh > 0 ? (sc / sh) * 100 : 0) + '%';
+    }, { passive: true });
+}
+
+// ===== CUSTOM CURSOR (desktop only) =====
+function initCursor() {
+    if (isMobile || isLowEnd) return;
+    const dot = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    if (!dot || !ring) return;
+    document.body.classList.add('cur-on');
+    let rx = 0, ry = 0, mx = 0, my = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.style.left = mx + 'px'; dot.style.top = my + 'px'; }, { passive: true });
+    (function lerp() {
+        rx += (mx - rx) * 0.13; ry += (my - ry) * 0.13;
+        ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+        requestAnimationFrame(lerp);
+    })();
+    document.querySelectorAll('a,button,[onclick],.stat-item,.ThongTinThanhToan').forEach(el => {
+        el.addEventListener('mouseenter', () => ring.classList.add('hov'), { passive: true });
+        el.addEventListener('mouseleave', () => ring.classList.remove('hov'), { passive: true });
+    });
+}
+
+// ===== FLOATING CONTACT =====
+function initFloat() {
+    const fc = document.getElementById('float-contact');
+    const btn = document.getElementById('float-btn');
+    const icon = document.getElementById('float-icon');
+    const chatEl = document.getElementById('chatbot');
+    if (!fc || !btn) return;
+
+    btn.addEventListener('click', () => {
+        fc.classList.toggle('open');
+        if (icon) icon.className = fc.classList.contains('open') ? 'fas fa-times' : 'fas fa-comments';
+    }, { passive: true });
+
+    document.getElementById('open-chat')?.addEventListener('click', () => {
+        chatEl?.classList.add('open');
+        fc.classList.remove('open');
+        if (icon) icon.className = 'fas fa-comments';
+        setTimeout(() => document.getElementById('chat-input')?.focus(), 300);
+    }, { passive: true });
+
+    document.getElementById('close-chat')?.addEventListener('click', () => {
+        chatEl?.classList.remove('open');
+    }, { passive: true });
+}
+
+// ===== PARTICLE SYSTEM (desktop only, lightweight) =====
+function initParticles() {
+    if (isMobile || isLowEnd) return;
+    const canvas = document.getElementById('particle-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const COUNT = 35;
+    let W, H, pts;
+
+    function resize() {
+        W = canvas.width  = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize, { passive: true });
+
+    pts = Array.from({ length: COUNT }, () => ({
+        x: Math.random() * W, y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4,
+        r: Math.random() * 1.5 + 0.5
+    }));
+
+    const MAX_DIST = 130;
+    function draw() {
+        ctx.clearRect(0, 0, W, H);
+        pts.forEach(p => {
+            p.x += p.vx; p.y += p.vy;
+            if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+            if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(0,255,255,0.7)';
+            ctx.fill();
+        });
+        for (let i = 0; i < COUNT; i++) {
+            for (let j = i + 1; j < COUNT; j++) {
+                const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
+                const d = Math.sqrt(dx * dx + dy * dy);
+                if (d < MAX_DIST) {
+                    ctx.beginPath();
+                    ctx.moveTo(pts[i].x, pts[i].y);
+                    ctx.lineTo(pts[j].x, pts[j].y);
+                    ctx.strokeStyle = `rgba(0,255,255,${0.15 * (1 - d / MAX_DIST)})`;
+                    ctx.lineWidth = 0.6;
+                    ctx.stroke();
+                }
+            }
+        }
+        requestAnimationFrame(draw);
+    }
+    draw();
+}
+
+// ===== ADAPTIVE PERFORMANCE MONITOR =====
+function initAdaptivePerf() {
+    if (prefersReducedMotion) return;
+    const FPS_HISTORY = [];
+    let lastCheck = performance.now(), frames = 0;
+
+    function check(now) {
+        frames++;
+        if (now - lastCheck > 1500) {
+            const fps = frames * 1000 / (now - lastCheck);
+            FPS_HISTORY.push(fps);
+            if (FPS_HISTORY.length > 5) FPS_HISTORY.shift();
+            const avg = FPS_HISTORY.reduce((a, b) => a + b, 0) / FPS_HISTORY.length;
+            if (avg < 25) {
+                // Tắt blob animation khi FPS thấp
+                document.querySelectorAll('.bg-blob').forEach(b => b.style.animationPlayState = 'paused');
+                document.getElementById('particle-canvas')?.style.setProperty('display', 'none');
+            } else if (avg > 45) {
+                document.querySelectorAll('.bg-blob').forEach(b => b.style.animationPlayState = 'running');
+            }
+            lastCheck = now; frames = 0;
+        }
+        requestAnimationFrame(check);
+    }
+    requestAnimationFrame(check);
+}
+
+// ===== RUN ALL NEW FEATURES =====
+document.addEventListener('DOMContentLoaded', () => {
+    initCursor();
+    initFloat();
+    initAdaptivePerf();
+    // Particles chạy sau idle để không ảnh hưởng load
+    const idle = typeof requestIdleCallback === 'function' ? requestIdleCallback : f => setTimeout(f, 500);
+    idle(initParticles);
+}, { once: true });
