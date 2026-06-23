@@ -163,6 +163,15 @@ body {
     letter-spacing: 0.4px;
 }
 
+.hero-role {
+    font-size: 12px;
+    color: rgba(0, 255, 255, 0.6);
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin: 2px 0 10px;
+    font-family: 'Rubik', sans-serif;
+}
+
 .TieuSu {
     text-align: center;
     color: rgba(255,255,255,0.85);
@@ -207,7 +216,7 @@ body {
     100% { background-position: 0% 50%; }
 }
 
-.TikTok, .Facebook, .Github, .YouTube {
+.TikTok, .Facebook, .Zalo, .YouTube {
     position: relative;
     border-radius: 12px;
     font-size: 1rem;
@@ -225,19 +234,19 @@ body {
 
 /* Chỉ chạy gradient animation trên desktop có hover — tiết kiệm pin mobile */
 @media (hover: hover) {
-    .TikTok, .Facebook, .Github, .YouTube {
+    .TikTok, .Facebook, .Zalo, .YouTube {
         animation: gradientAnimation 6s ease infinite;
     }
 }
 
 .TikTok  { background-image: linear-gradient(45deg, #111, #1aa8a3, #b8234a, #111); box-shadow: 0 3px 12px rgba(37,244,238,0.12); }
 .Facebook{ background-image: linear-gradient(45deg, #1565c0, #2979d6, #0d8de8); box-shadow: 0 3px 12px rgba(24,119,242,0.15); }
-.Github  { background-image: linear-gradient(45deg, #1a1e24, #2b3038, #5a3d7a); box-shadow: 0 3px 12px rgba(110,84,148,0.12); }
+.Zalo    { background-image: linear-gradient(45deg, #0068ff, #0054cc, #0084ff); box-shadow: 0 3px 12px rgba(0,104,255,0.15); }
 .YouTube { background-image: linear-gradient(45deg, #cc1a1a, #a31818, #e83030); box-shadow: 0 3px 12px rgba(255,0,0,0.12); }
 
 .TikTok:hover   { box-shadow: 0 6px 20px rgba(37,244,238,0.25); border-color: rgba(37,244,238,0.3); }
 .Facebook:hover { box-shadow: 0 6px 20px rgba(24,119,242,0.3); border-color: rgba(24,119,242,0.3); }
-.Github:hover   { box-shadow: 0 6px 20px rgba(110,84,148,0.25); border-color: rgba(110,84,148,0.3); }
+.Zalo:hover     { box-shadow: 0 6px 20px rgba(0,104,255,0.3); border-color: rgba(0,104,255,0.3); }
 .YouTube:hover  { box-shadow: 0 6px 20px rgba(255,0,0,0.28); border-color: rgba(255,50,50,0.3); }
 
 /* ==================== SERVICE CARDS ==================== */
@@ -520,18 +529,12 @@ hr.ThanhGachNgang, hr.New {
 /* ==================== LOW-END DEVICE ==================== */
 @media (prefers-reduced-data: reduce) {
     .bg-blob { display: none; }
-    .TikTok, .Facebook, .Github, .YouTube { animation: none !important; }
+    .TikTok, .Facebook, .Zalo, .YouTube { animation: none !important; }
     .rainbow { animation: none !important; color: #00FFFF; }
     .avatar-ring { animation: none !important; background: rgba(0,255,255,0.25); }
 }
 
-/* ==================== HERO SECTION ==================== */
-.hero-section { margin:16px auto; padding:28px 20px 20px; max-width:520px; background:rgba(8,12,28,0.6); border:1px solid rgba(0,255,255,0.14); border-radius:20px; box-shadow:0 8px 36px rgba(0,0,0,0.4); animation:fadeIn 0.8s ease forwards; }
-.avatar-ring { display:inline-block; padding:3px; border-radius:50%; background:conic-gradient(#00ffff 0%,#6c63ff 33%,#00cc88 66%,#00ffff 100%); animation:ringRotate 5s linear infinite; margin:8px auto; vertical-align:middle; }
-@keyframes ringRotate { to { transform:rotate(360deg); } }
-.hero-role { font-size:12px; color:rgba(0,255,255,0.6); letter-spacing:2.5px; text-transform:uppercase; margin:2px 0 10px; font-family:'Rubik',sans-serif; }
-.hero-meta { display:inline-block; background:rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:10px 18px; margin:10px 0; font-size:13px; line-height:1.9; }
-.hero-social-title { font-size:15px; font-family:'Rowdies',sans-serif; color:rgba(255,255,255,0.6); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:6px; font-weight:400; }
+
 
 /* ==================== SKILL ICONS ==================== */
 .skill-name { display:flex; align-items:center; justify-content:space-between; }
@@ -542,13 +545,7 @@ hr.ThanhGachNgang, hr.New {
 /* ==================== SCROLL PROGRESS ==================== */
 #scroll-progress { position:fixed; top:0; left:0; z-index:99999; height:3px; width:0%; background:linear-gradient(90deg,#00ffff,#6c63ff,#00cc88); pointer-events:none; transition:width 0.08s linear; }
 
-/* ==================== STATS ==================== */
-.stats-section { display:flex; justify-content:center; gap:16px; padding:12px 10px; flex-wrap:wrap; }
-.stat-item { text-align:center; min-width:76px; padding:14px 18px; background:rgba(0,255,255,0.05); border:1px solid rgba(0,255,255,0.12); border-radius:14px; transition:transform 0.2s,border-color 0.2s; contain:layout style; }
-.stat-item:hover { transform:translateY(-3px); border-color:rgba(0,255,255,0.3); }
-.stat-num { font-size:28px; font-weight:700; color:#00ffff; font-family:'Rubik',sans-serif; }
-.stat-unit { font-size:16px; color:#00ffff; font-weight:600; }
-.stat-label { font-size:12px; color:rgba(255,255,255,0.55); margin-top:4px; }
+
 
 /* ==================== FLOATING CONTACT ==================== */
 #float-contact { position:fixed; bottom:24px; right:18px; z-index:9000; display:flex; flex-direction:column; align-items:center; gap:9px; }
@@ -559,25 +556,7 @@ hr.ThanhGachNgang, hr.New {
 .float-item:hover { background:rgba(0,255,255,0.15); }
 #float-contact.open .float-item { opacity:1; transform:scale(1) translateY(0); pointer-events:all; }
 
-/* ==================== CHATBOT ==================== */
-#chatbot { position:fixed; bottom:86px; right:18px; z-index:9500; width:300px; max-width:calc(100vw - 32px); background:rgba(8,12,28,0.97); border:1px solid rgba(0,255,255,0.18); border-radius:16px; box-shadow:0 16px 50px rgba(0,0,0,0.6); display:none; flex-direction:column; overflow:hidden; }
-#chatbot.open { display:flex; animation:floatIn 0.3s ease; }
-.chatbot-header { display:flex; justify-content:space-between; align-items:center; padding:11px 16px; background:rgba(0,255,255,0.07); border-bottom:1px solid rgba(0,255,255,0.1); font-family:'Rowdies',sans-serif; font-size:13px; color:#fff; }
-.chat-status { font-size:10px; color:#00ff88; margin-left:8px; font-family:'Rubik',sans-serif; }
-#close-chat { background:none; border:none; color:rgba(255,255,255,0.5); cursor:pointer; font-size:14px; padding:4px; transition:color 0.2s; }
-#close-chat:hover { color:#fff; }
-#chat-messages { flex:1; padding:12px; overflow-y:auto; max-height:250px; display:flex; flex-direction:column; gap:8px; font-size:13px; font-family:'Rubik',sans-serif; }
-.bot-msg,.user-msg { padding:8px 12px; border-radius:12px; max-width:88%; line-height:1.5; word-break:break-word; }
-.bot-msg { background:rgba(0,255,255,0.08); border:1px solid rgba(0,255,255,0.12); color:#e0e0e0; align-self:flex-start; }
-.user-msg { background:rgba(0,255,255,0.15); border:1px solid rgba(0,255,255,0.2); color:#fff; align-self:flex-end; }
-.typing span { display:inline-block; width:6px; height:6px; background:#00ffff; border-radius:50%; margin:0 2px; animation:typingDot 1s infinite; }
-.typing span:nth-child(2){animation-delay:0.2s;} .typing span:nth-child(3){animation-delay:0.4s;}
-@keyframes typingDot { 0%,60%,100%{transform:translateY(0);} 30%{transform:translateY(-6px);} }
-.chatbot-input { display:flex; padding:10px 12px; gap:8px; border-top:1px solid rgba(255,255,255,0.06); }
-#chat-input { flex:1; background:rgba(255,255,255,0.06); border:1px solid rgba(0,255,255,0.15); border-radius:20px; color:#fff; padding:8px 14px; font-size:13px; font-family:'Rubik',sans-serif; outline:none; }
-#chat-input:focus { border-color:rgba(0,255,255,0.35); }
-#chat-send { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,rgba(0,255,255,0.2),rgba(0,114,255,0.3)); border:1px solid rgba(0,255,255,0.3); color:#00ffff; cursor:pointer; font-size:13px; transition:transform 0.2s; touch-action:manipulation; flex-shrink:0; }
-#chat-send:hover { transform:scale(1.1); }
+
 
 /* ==================== CUSTOM CURSOR ==================== */
 #cursor-dot,#cursor-ring { position:fixed; pointer-events:none; border-radius:50%; z-index:99998; display:none; }
@@ -590,24 +569,16 @@ body.cur-on * { cursor:none !important; }
 /* ==================== PARTICLE CANVAS ==================== */
 #particle-canvas { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-9997; pointer-events:none; opacity:0.35; }
 
-/* ==================== VISUALIZER ==================== */
-#visualizer-wrap { width:90%; max-width:480px; margin:10px auto; border-radius:10px; overflow:hidden; background:rgba(0,0,0,0.25); display:none; }
-#visualizer-canvas { width:100%; display:block; }
+
 
 /* Responsive */
 @media (max-width:600px) {
-    .hero-section{margin:8px;padding:20px 14px 16px;border-radius:16px;}
     .Blob{height:110px;width:110px;}
-    .hero-meta{padding:8px 12px;font-size:12px;}
     .skill-icon{font-size:14px;}
-    #chatbot{width:calc(100vw - 32px);right:16px;}
     #float-contact{bottom:16px;right:14px;}
-    .stat-num{font-size:22px;}
 }
 @media (max-width:380px) {
     .Blob{height:90px;width:90px;}
-    .stats-section{gap:10px;}
-    .stat-item{padding:10px 12px;min-width:64px;}
 }
 @media (prefers-reduced-motion:reduce) {
     *,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;}
@@ -618,102 +589,6 @@ body.cur-on * { cursor:none !important; }
 }
 
 
-/* ==================== HERO SECTION ==================== */
-.hero-section {
-    margin: 16px auto;
-    padding: 28px 20px 20px;
-    max-width: 520px;
-    background: rgba(8,12,28,0.6);
-    border: 1px solid rgba(0,255,255,0.14);
-    border-radius: 20px;
-    box-shadow: 0 8px 36px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
-    animation: fadeIn 0.8s ease forwards;
-}
-
-/* Ring xoay quanh avatar */
-.avatar-ring {
-    display: inline-block;
-    padding: 3px;
-    border-radius: 50%;
-    background: conic-gradient(#00ffff 0%, #6c63ff 33%, #00cc88 66%, #00ffff 100%);
-    animation: ringRotate 5s linear infinite;
-    margin: 8px auto;
-    /* Căn giữa trong thẻ p */
-    vertical-align: middle;
-}
-@keyframes ringRotate { to { transform: rotate(360deg); } }
-
-/* Role text */
-.hero-role {
-    font-size: 12px;
-    color: rgba(0,255,255,0.6);
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    margin: 2px 0 10px;
-    font-family: 'Rubik', sans-serif;
-}
-
-/* Hero meta box (IP + Date) */
-.hero-meta {
-    display: inline-block;
-    background: rgba(0,0,0,0.25);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 10px;
-    padding: 10px 18px;
-    margin: 10px 0;
-    font-size: 13px;
-    line-height: 1.9;
-}
-
-.hero-social-title {
-    font-size: 15px;
-    font-family: 'Rowdies', sans-serif;
-    color: rgba(255,255,255,0.6);
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-    font-weight: 400;
-}
-
-/* ==================== SKILL ICONS ==================== */
-.skill-name {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-.skill-icon {
-    font-size: 16px;
-    margin-right: 8px;
-    flex-shrink: 0;
-}
-/* Tên ngôn ngữ chiếm phần còn lại */
-.skill-name > :first-child ~ :not(.skill-pct) { flex: 1; }
-.skill-pct {
-    font-size: 11px;
-    font-weight: 600;
-    color: rgba(0,255,255,0.7);
-    font-family: 'Rubik', sans-serif;
-    letter-spacing: 0.5px;
-    flex-shrink: 0;
-    margin-left: auto;
-    padding-left: 8px;
-}
-
-/* Ẩn tooltip ::before/::after khi có .skill-pct — tránh hiển thị 2 lần */
-.skill-per::before, .skill-per::after { display: none; }
-
-/* Responsive hero */
-@media (max-width: 600px) {
-    .hero-section { margin: 8px; padding: 20px 14px 16px; border-radius: 16px; }
-    .avatar-ring { padding: 2.5px; }
-    .Blob { height: 110px; width: 110px; }
-    .hero-meta { padding: 8px 12px; font-size: 12px; }
-    .skill-icon { font-size: 14px; }
-}
-@media (max-width: 380px) {
-    .Blob { height: 90px; width: 90px; }
-    .hero-section { padding: 16px 10px; }
-}
 
 /* Giảm blob animation trên thiết bị yếu (CPU ≤ 2 lõi) */
 @media (max-width: 480px) {

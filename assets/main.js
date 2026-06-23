@@ -455,7 +455,7 @@ function initFloat() {
     const fc = document.getElementById('float-contact');
     const btn = document.getElementById('float-btn');
     const icon = document.getElementById('float-icon');
-    const chatEl = document.getElementById('chatbot');
+
     if (!fc || !btn) return;
 
     btn.addEventListener('click', () => {
@@ -463,16 +463,7 @@ function initFloat() {
         if (icon) icon.className = fc.classList.contains('open') ? 'fas fa-times' : 'fas fa-comments';
     }, { passive: true });
 
-    document.getElementById('open-chat')?.addEventListener('click', () => {
-        chatEl?.classList.add('open');
-        fc.classList.remove('open');
-        if (icon) icon.className = 'fas fa-comments';
-        setTimeout(() => document.getElementById('chat-input')?.focus(), 300);
-    }, { passive: true });
 
-    document.getElementById('close-chat')?.addEventListener('click', () => {
-        chatEl?.classList.remove('open');
-    }, { passive: true });
 }
 
 // ===== PARTICLE SYSTEM (desktop only, lightweight) =====
