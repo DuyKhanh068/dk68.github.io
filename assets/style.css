@@ -1,5 +1,7 @@
 /* ==================== RESET & BASE ==================== */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -12,68 +14,100 @@ body {
     background: #0a0a0f;
     color: #e0e0e0;
     overflow-y: scroll;
-    /* Ngăn overscroll bounce gây giật trên Android */
     overscroll-behavior-y: contain;
-    /* Tăng tốc scroll bằng cách tách body sang GPU layer */
     -webkit-overflow-scrolling: touch;
 }
 
 /* ==================== BACKGROUND FIXED LAYERS ==================== */
 #background-layer {
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     z-index: -9999;
     background: #050510;
     overflow: hidden;
 }
 
-/* ===== MESH GRADIENT BLOBS (GPU-accelerated transform) ===== */
 .bg-blob {
     position: absolute;
     border-radius: 50%;
     filter: blur(72px);
     opacity: 0;
     animation: blobFadeIn 2.5s ease forwards;
-    /* transform ưu tiên composite trên GPU, không gây reflow */
     will-change: transform;
 }
+
 .bg-blob1 {
-    width: 65vw; height: 65vw;
-    background: radial-gradient(circle, rgba(0,90,160,0.65), transparent 70%);
-    top: -15%; left: -10%;
+    width: 65vw;
+    height: 65vw;
+    background: radial-gradient(circle, rgba(0, 90, 160, 0.65), transparent 70%);
+    top: -15%;
+    left: -10%;
     animation: blobFadeIn 2.5s ease 0.1s forwards, blob1Move 20s ease-in-out infinite alternate;
 }
+
 .bg-blob2 {
-    width: 55vw; height: 55vw;
-    background: radial-gradient(circle, rgba(70,0,120,0.55), transparent 70%);
-    bottom: -15%; right: -10%;
+    width: 55vw;
+    height: 55vw;
+    background: radial-gradient(circle, rgba(70, 0, 120, 0.55), transparent 70%);
+    bottom: -15%;
+    right: -10%;
     animation: blobFadeIn 2.5s ease 0.4s forwards, blob2Move 24s ease-in-out infinite alternate;
 }
+
 .bg-blob3 {
-    width: 50vw; height: 50vw;
-    background: radial-gradient(circle, rgba(0,90,55,0.45), transparent 70%);
-    top: 35%; left: 25%;
+    width: 50vw;
+    height: 50vw;
+    background: radial-gradient(circle, rgba(0, 90, 55, 0.45), transparent 70%);
+    top: 35%;
+    left: 25%;
     animation: blobFadeIn 2.5s ease 0.7s forwards, blob3Move 18s ease-in-out infinite alternate;
 }
-@keyframes blobFadeIn { to { opacity: 1; } }
+
+@keyframes blobFadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
 @keyframes blob1Move {
-    0%   { transform: translate(0,0); }
-    100% { transform: translate(14vw, 10vh); }
+    0% {
+        transform: translate(0, 0);
+    }
+
+    100% {
+        transform: translate(14vw, 10vh);
+    }
 }
+
 @keyframes blob2Move {
-    0%   { transform: translate(0,0); }
-    100% { transform: translate(-12vw,-14vh); }
+    0% {
+        transform: translate(0, 0);
+    }
+
+    100% {
+        transform: translate(-12vw, -14vh);
+    }
 }
+
 @keyframes blob3Move {
-    0%   { transform: translate(0,0) scale(1); }
-    100% { transform: translate(-8vw,12vh) scale(1.15); }
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    100% {
+        transform: translate(-8vw, 12vh) scale(1.15);
+    }
 }
 
 .overlay-dim {
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background: rgba(5, 5, 15, 0.72);
     z-index: -9998;
     pointer-events: none;
@@ -98,28 +132,43 @@ body {
     margin: 6px;
     border: 1px solid rgba(0, 255, 255, 0.18);
     border-radius: 14px;
-    /* borderGlow animation loại bỏ — tốn GPU liên tục */
 }
 
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); }
-::-webkit-scrollbar-thumb { background: rgba(0,255,255,0.28); border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(0,255,255,0.48); }
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 255, 0.28);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 255, 255, 0.48);
+}
 
 /* ==================== TOPNAV ==================== */
 .Topnav {
     overflow: hidden;
-    border-bottom: 1px solid rgba(255,255,255,0.07);
-    /* backdrop-filter nặng — chỉ dùng trên thiết bị mạnh */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
+
 @media (min-width: 768px) and (hover: hover) {
-    .Topnav { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+    .Topnav {
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+    }
 }
+
 .Topnav a {
     font-family: 'Rubik', sans-serif;
     float: left;
     display: block;
-    color: rgba(255,255,255,0.6);
+    color: rgba(255, 255, 255, 0.6);
     text-align: center;
     padding: 12px 14px;
     text-decoration: none;
@@ -129,11 +178,18 @@ body {
     text-transform: uppercase;
     border-bottom: 2px solid transparent;
     transition: color 0.2s, border-color 0.2s;
-    /* Loại bỏ delay 300ms tap trên mobile */
     touch-action: manipulation;
 }
-.Topnav a:hover { color: #00ffff; border-bottom-color: rgba(0,255,255,0.5); }
-.Topnav a.Active { color: #00ffff; border-bottom: 2px solid #00ffff; }
+
+.Topnav a:hover {
+    color: #00ffff;
+    border-bottom-color: rgba(0, 255, 255, 0.5);
+}
+
+.Topnav a.Active {
+    color: #00ffff;
+    border-bottom: 2px solid #00ffff;
+}
 
 /* ==================== AVATAR & TITLES ==================== */
 .Blob {
@@ -142,14 +198,15 @@ body {
     height: 130px;
     width: 130px;
     overflow: hidden;
-    border: 2px solid rgba(0,255,255,0.25);
-    box-shadow: 0 0 20px rgba(0,255,255,0.15);
+    border: 2px solid rgba(0, 255, 255, 0.25);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     animation: fadeIn 1s ease forwards;
 }
+
 .Blob:hover {
     transform: scale(1.04);
-    box-shadow: 0 0 30px rgba(0,255,255,0.25);
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.25);
 }
 
 .NameFtDuyKhanh {
@@ -159,7 +216,7 @@ body {
     line-height: 1.8;
     margin-bottom: 0;
     font-family: 'Rowdies', sans-serif;
-    text-shadow: 0 0 12px rgba(0,255,255,0.25);
+    text-shadow: 0 0 12px rgba(0, 255, 255, 0.25);
     letter-spacing: 0.4px;
 }
 
@@ -174,7 +231,7 @@ body {
 
 .TieuSu {
     text-align: center;
-    color: rgba(255,255,255,0.85);
+    color: rgba(255, 255, 255, 0.85);
     font-size: 18px;
     font-weight: 400;
 }
@@ -187,7 +244,7 @@ body {
 
 /* ==================== SOCIAL BUTTONS ==================== */
 .MangXaHoiFtDuyKhanh div {
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     color: white;
     padding: 12px 20px;
@@ -199,24 +256,47 @@ body {
     letter-spacing: 0.2px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     text-align: center;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
     touch-action: manipulation;
-    /* Cô lập repaint, không ảnh hưởng phần tử khác */
     contain: layout style;
 }
-.MangXaHoiFtDuyKhanh div:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.2); }
-.MangXaHoiFtDuyKhanh div:active { transform: translateY(1px); }
-.MangXaHoiFtDuyKhanh a { text-decoration: none; }
-.MangXaHoiFtDuyKhanh div i { display: inline-block; margin-right: 7px; }
 
-/* gradient animation chỉ chạy trên thiết bị có hover (desktop/laptop) */
-@keyframes gradientAnimation {
-    0%   { background-position: 0% 50%; }
-    50%  { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+.MangXaHoiFtDuyKhanh div:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
-.TikTok, .Facebook, .Zalo, .YouTube {
+.MangXaHoiFtDuyKhanh div:active {
+    transform: translateY(1px);
+}
+
+.MangXaHoiFtDuyKhanh a {
+    text-decoration: none;
+}
+
+.MangXaHoiFtDuyKhanh div i {
+    display: inline-block;
+    margin-right: 7px;
+}
+
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.TikTok,
+.Facebook,
+.Zalo,
+.YouTube {
     position: relative;
     border-radius: 12px;
     font-size: 1rem;
@@ -229,25 +309,58 @@ body {
     color: #fff !important;
     font-weight: 600;
     background-size: 200% 200%;
-    border: 1px solid rgba(255,255,255,0.08);
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* Chỉ chạy gradient animation trên desktop có hover — tiết kiệm pin mobile */
 @media (hover: hover) {
-    .TikTok, .Facebook, .Zalo, .YouTube {
+
+    .TikTok,
+    .Facebook,
+    .Zalo,
+    .YouTube {
         animation: gradientAnimation 6s ease infinite;
     }
 }
 
-.TikTok  { background-image: linear-gradient(45deg, #111, #1aa8a3, #b8234a, #111); box-shadow: 0 3px 12px rgba(37,244,238,0.12); }
-.Facebook{ background-image: linear-gradient(45deg, #1565c0, #2979d6, #0d8de8); box-shadow: 0 3px 12px rgba(24,119,242,0.15); }
-.Zalo    { background-image: linear-gradient(45deg, #0068ff, #0054cc, #0084ff); box-shadow: 0 3px 12px rgba(0,104,255,0.15); }
-.YouTube { background-image: linear-gradient(45deg, #cc1a1a, #a31818, #e83030); box-shadow: 0 3px 12px rgba(255,0,0,0.12); }
+.TikTok {
+    background-image: linear-gradient(45deg, #111, #1aa8a3, #b8234a, #111);
+    box-shadow: 0 3px 12px rgba(37, 244, 238, 0.12);
+}
 
-.TikTok:hover   { box-shadow: 0 6px 20px rgba(37,244,238,0.25); border-color: rgba(37,244,238,0.3); }
-.Facebook:hover { box-shadow: 0 6px 20px rgba(24,119,242,0.3); border-color: rgba(24,119,242,0.3); }
-.Zalo:hover     { box-shadow: 0 6px 20px rgba(0,104,255,0.3); border-color: rgba(0,104,255,0.3); }
-.YouTube:hover  { box-shadow: 0 6px 20px rgba(255,0,0,0.28); border-color: rgba(255,50,50,0.3); }
+.Facebook {
+    background-image: linear-gradient(45deg, #1565c0, #2979d6, #0d8de8);
+    box-shadow: 0 3px 12px rgba(24, 119, 242, 0.15);
+}
+
+.Zalo {
+    background-image: linear-gradient(45deg, #0068ff, #0054cc, #0084ff);
+    box-shadow: 0 3px 12px rgba(0, 104, 255, 0.15);
+}
+
+.YouTube {
+    background-image: linear-gradient(45deg, #cc1a1a, #a31818, #e83030);
+    box-shadow: 0 3px 12px rgba(255, 0, 0, 0.12);
+}
+
+.TikTok:hover {
+    box-shadow: 0 6px 20px rgba(37, 244, 238, 0.25);
+    border-color: rgba(37, 244, 238, 0.3);
+}
+
+.Facebook:hover {
+    box-shadow: 0 6px 20px rgba(24, 119, 242, 0.3);
+    border-color: rgba(24, 119, 242, 0.3);
+}
+
+.Zalo:hover {
+    box-shadow: 0 6px 20px rgba(0, 104, 255, 0.3);
+    border-color: rgba(0, 104, 255, 0.3);
+}
+
+.YouTube:hover {
+    box-shadow: 0 6px 20px rgba(255, 0, 0, 0.28);
+    border-color: rgba(255, 50, 50, 0.3);
+}
 
 /* ==================== SERVICE CARDS ==================== */
 .ThongTinThanhToan {
@@ -255,23 +368,26 @@ body {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    background: rgba(20,25,35,0.82);
+    background: rgba(20, 25, 35, 0.82);
     padding: 16px;
     border-radius: 12px;
-    border: 1px solid rgba(0,255,255,0.1);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.28);
+    border: 1px solid rgba(0, 255, 255, 0.1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.28);
     color: #fff;
     width: 85%;
     margin: 8px auto;
     transition: transform 0.2s ease, border-color 0.2s ease;
-    /* Giới hạn vùng repaint của từng card */
-    contain: layout style paint;
+    /* content-visibility:auto đã bao hàm contain:layout style paint size */
+    content-visibility: auto;
+    contain-intrinsic-size: 0 80px;
     touch-action: manipulation;
 }
+
 .ThongTinThanhToan:hover {
     transform: translateY(-2px);
-    border-color: rgba(0,255,255,0.22);
+    border-color: rgba(0, 255, 255, 0.22);
 }
+
 .ThongTinThanhToanTitle {
     font-size: 18px;
     font-weight: 700;
@@ -280,96 +396,142 @@ body {
     font-family: 'Rowdies', sans-serif;
     letter-spacing: 0.4px;
 }
+
 .ThongTinThanhToanText {
     font-size: 14px;
     font-weight: 400;
-    color: rgba(0,230,100,0.88);
+    color: rgba(0, 230, 100, 0.88);
     margin: 5px 0 0;
 }
 
 /* ==================== HR ==================== */
-hr.ThanhGachNgang, hr.New {
+hr.ThanhGachNgang,
+hr.New {
     border: none;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(0,255,255,0.18), transparent);
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.18), transparent);
     margin: 0 16px;
 }
 
 /* ==================== FOOTER ==================== */
-.Cuoi { padding: 36px 0; color: #fff; }
+.Cuoi {
+    padding: 36px 0;
+    color: #fff;
+}
+
 .rainbow {
     margin-top: 12px;
     text-align: center;
     font-size: 13px;
-    color: rgba(255,255,255,0.5);
+    color: rgba(255, 255, 255, 0.5);
     animation: colorRotate 3s linear infinite;
 }
 
 @keyframes colorRotate {
-    0%   { color: rgba(255,255,255,0.5); }
-    25%  { color: #00FFFF; }
-    50%  { color: #00CC88; }
-    75%  { color: #6C63FF; }
-    100% { color: rgba(255,255,255,0.5); }
+    0% {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    25% {
+        color: #00FFFF;
+    }
+
+    50% {
+        color: #00CC88;
+    }
+
+    75% {
+        color: #6C63FF;
+    }
+
+    100% {
+        color: rgba(255, 255, 255, 0.5);
+    }
 }
 
 /* ==================== SKILL BARS ==================== */
-.skill-box { display: flex; justify-content: center; align-items: center; flex-direction: column; }
-.skill { width: 65%; max-width: 500px; padding: 0 16px; }
+.skill-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.skill {
+    width: 65%;
+    max-width: 500px;
+    padding: 0 16px;
+}
+
+/* Gộp 2 rule .skill-name thành 1 */
 .skill-name {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     font-size: 13px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1.2px;
-    color: rgba(255,255,255,0.7);
+    color: rgba(255, 255, 255, 0.7);
     font-family: 'Rubik', sans-serif;
     margin: 12px 0;
 }
-.skill-bar { height: 7px; background: rgba(255,255,255,0.09); border-radius: 8px; overflow: hidden; }
+
+.skill-icon {
+    font-size: 16px;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.skill-pct {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(0, 255, 255, 0.7);
+    font-family: 'Rubik', sans-serif;
+    flex-shrink: 0;
+    margin-left: auto;
+    padding-left: 8px;
+}
+
+.skill-bar {
+    height: 7px;
+    background: rgba(255, 255, 255, 0.09);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
 .skill-per {
     height: 7px;
     border-radius: 8px;
     width: 0;
     position: relative;
-    /* will-change chỉ trong lúc animate, JS sẽ set/unset */
 }
-.skill-per::before {
-    content: attr(per);
-    position: absolute;
-    padding: 2px 7px;
-    background: rgba(20,25,40,0.92);
-    border: 1px solid rgba(0,255,255,0.2);
-    color: #00ffff;
-    font-size: 10px;
-    font-family: 'Rubik', sans-serif;
-    font-weight: 600;
-    border-radius: 5px;
-    top: -28px;
-    right: 0;
-    transform: translateX(50%);
+
+/* Đã bỏ ::before và ::after (tooltip dead code — bị display:none ở cuối file gốc) */
+
+.color1 {
+    background: linear-gradient(90deg, #00ff88, #00cc66);
 }
-.skill-per::after {
-    content: '';
-    position: absolute;
-    width: 7px; height: 7px;
-    background: rgba(20,25,40,0.92);
-    border-right: 1px solid rgba(0,255,255,0.2);
-    border-bottom: 1px solid rgba(0,255,255,0.2);
-    top: -11px; right: 0;
-    transform: translateX(50%) rotate(45deg);
+
+.color2 {
+    background: linear-gradient(90deg, #ff6b8a, #ff4466);
 }
-.color1 { background: linear-gradient(90deg, #00ff88, #00cc66); }
-.color2 { background: linear-gradient(90deg, #ff6b8a, #ff4466); }
-.color3 { background: linear-gradient(90deg, #6c63ff, #5548e0); }
-.color4 { background: linear-gradient(90deg, #ffd700, #f0c000); }
+
+.color3 {
+    background: linear-gradient(90deg, #6c63ff, #5548e0);
+}
+
+.color4 {
+    background: linear-gradient(90deg, #ffd700, #f0c000);
+}
 
 /* ==================== TOAST ==================== */
 #Toast {
     visibility: hidden;
     min-width: 220px;
     margin-left: -110px;
-    background: rgba(15,20,30,0.92);
-    border: 1px solid rgba(0,255,255,0.2);
+    background: rgba(15, 20, 30, 0.92);
+    border: 1px solid rgba(0, 255, 255, 0.2);
     color: #00ffff;
     text-align: center;
     border-radius: 50px;
@@ -381,6 +543,7 @@ hr.ThanhGachNgang, hr.New {
     font-size: 15px;
     font-family: 'Rubik', sans-serif;
 }
+
 #Toast.show {
     visibility: visible;
     animation: fadein 1.8s, fadeout 1.8s 2s;
@@ -389,28 +552,35 @@ hr.ThanhGachNgang, hr.New {
 /* ==================== NOTIFICATION ==================== */
 .notification {
     position: fixed;
-    top: 50%; left: 50%;
+    top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
     width: 92%;
     max-width: 380px;
-    background: rgba(10,15,25,0.9);
-    border: 1px solid rgba(0,255,255,0.15);
+    background: rgba(10, 15, 25, 0.9);
+    border: 1px solid rgba(0, 255, 255, 0.15);
     border-radius: 20px;
     padding: 28px 24px;
     text-align: center;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
     z-index: 10000;
-    animation: floatIn 0.4s cubic-bezier(0.16,1,0.3,1);
+    animation: floatIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     transition: opacity 0.25s ease, transform 0.25s ease;
-    /* backdrop-filter chỉ trên thiết bị mạnh */
 }
+
 @media (min-width: 600px) and (hover: hover) {
     .notification {
         backdrop-filter: blur(16px) saturate(140%);
         -webkit-backdrop-filter: blur(16px) saturate(140%);
     }
 }
-.notification-icon { font-size: 40px; color: #00ffff; margin-bottom: 10px; }
+
+.notification-icon {
+    font-size: 40px;
+    color: #00ffff;
+    margin-bottom: 10px;
+}
+
 .notification h2 {
     font-size: 22px;
     font-weight: 700;
@@ -419,57 +589,91 @@ hr.ThanhGachNgang, hr.New {
     letter-spacing: 0.4px;
     font-family: 'Rowdies', sans-serif;
 }
+
 .notification p {
     font-size: 15px;
-    color: rgba(224,242,254,0.82);
+    color: rgba(224, 242, 254, 0.82);
     margin: 10px 0 20px;
     line-height: 1.55;
     font-family: 'Rubik', sans-serif;
 }
+
 .button1 {
-    background: linear-gradient(135deg, rgba(0,255,255,0.14), rgba(0,114,255,0.22));
-    border: 1px solid rgba(0,255,255,0.28);
+    background: linear-gradient(135deg, rgba(0, 255, 255, 0.14), rgba(0, 114, 255, 0.22));
+    border: 1px solid rgba(0, 255, 255, 0.28);
     color: #00ffff;
     font-weight: 600;
     padding: 11px 28px;
     border-radius: 60px;
     cursor: pointer;
-    box-shadow: 0 3px 16px rgba(0,255,255,0.1);
+    box-shadow: 0 3px 16px rgba(0, 255, 255, 0.1);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     letter-spacing: 0.8px;
     text-transform: uppercase;
     font-family: 'Rubik', sans-serif;
     font-size: 13px;
     touch-action: manipulation;
-    /* Kích thước tối thiểu 44px cho accessibility mobile */
     min-height: 44px;
 }
+
 .button1:hover {
     transform: translateY(-2px);
-    box-shadow: 0 7px 24px rgba(0,255,255,0.18);
-    border-color: rgba(0,255,255,0.45);
+    box-shadow: 0 7px 24px rgba(0, 255, 255, 0.18);
+    border-color: rgba(0, 255, 255, 0.45);
 }
-.button1:active { transform: translateY(1px); }
+
+.button1:active {
+    transform: translateY(1px);
+}
 
 /* ==================== ANIMATIONS ==================== */
 @keyframes floatIn {
-    0%   { opacity: 0; transform: translate(-50%, -46%) scale(0.95); }
-    100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-}
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
-@keyframes fadein {
-    from { bottom: 0; opacity: 0; }
-    to   { bottom: 30px; opacity: 1; }
-}
-@keyframes fadeout {
-    from { bottom: 30px; opacity: 1; }
-    to   { bottom: 0; opacity: 0; }
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -46%) scale(0.95);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
 }
 
-/* ==================== IP ELEMENT ==================== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadein {
+    from {
+        bottom: 0;
+        opacity: 0;
+    }
+
+    to {
+        bottom: 30px;
+        opacity: 1;
+    }
+}
+
+@keyframes fadeout {
+    from {
+        bottom: 30px;
+        opacity: 1;
+    }
+
+    to {
+        bottom: 0;
+        opacity: 0;
+    }
+}
+
+/* ==================== IP & WEATHER ==================== */
 #checkip_address {
     cursor: pointer;
     user-select: none;
@@ -477,121 +681,298 @@ hr.ThanhGachNgang, hr.New {
     align-items: center;
     transition: opacity 0.25s ease, transform 0.25s ease;
 }
-#checkip_address:hover { transform: translateY(-1px); }
 
-/* ==================== RESPONSIVE MOBILE ==================== */
-@media (max-width: 600px) {
-    .Border { margin: 3px; border-radius: 10px; }
-    .BlurWebs { font-size: 13px; }
-    .Blob { height: 110px; width: 110px; }
-    .NameFtDuyKhanh { font-size: 18px; }
-    .TieuSu { font-size: 15px; }
-    .MangXaHoiFtDuyKhanh div { width: 88%; font-size: 14px; padding: 11px 14px; }
-    .ThongTinThanhToan { width: 92%; padding: 14px; }
-    .ThongTinThanhToanTitle { font-size: 16px; }
-    .ThongTinThanhToanText { font-size: 13px; }
-    .skill { width: 85%; }
-    .notification { padding: 22px 16px; border-radius: 16px; }
-    .notification h2 { font-size: 19px; }
-    .notification p  { font-size: 14px; }
-    .button1 { padding: 10px 22px; font-size: 12px; }
-    .Topnav a { padding: 10px 10px; font-size: 12px; }
-    #Toast { min-width: 180px; margin-left: -90px; font-size: 13px; padding: 10px 16px; }
+#checkip_address:hover {
+    transform: translateY(-1px);
 }
 
-/* content-visibility: lazy-render phần dưới fold — tăng tốc render ban đầu */
+/* FIX: Thêm transition cho weather_temp — JS set opacity để fade nhưng thiếu transition */
+#weather_temp {
+    transition: opacity 0.25s ease;
+}
+
+/* ==================== SCROLL PROGRESS ==================== */
+#scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99999;
+    height: 3px;
+    width: 0%;
+    background: linear-gradient(90deg, #00ffff, #6c63ff, #00cc88);
+    pointer-events: none;
+}
+
+/* ==================== FLOATING CONTACT ==================== */
+#float-contact {
+    position: fixed;
+    bottom: 24px;
+    right: 18px;
+    z-index: 9000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+}
+
+#float-btn {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00ffff, #6c63ff);
+    border: none;
+    cursor: pointer;
+    color: #050510;
+    font-size: 20px;
+    box-shadow: 0 4px 20px rgba(0, 255, 255, 0.4);
+    transition: transform 0.25s, box-shadow 0.25s;
+    touch-action: manipulation;
+}
+
+#float-btn:hover {
+    transform: scale(1.1) rotate(15deg);
+    box-shadow: 0 6px 28px rgba(0, 255, 255, 0.55);
+}
+
+.float-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.float-item {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(12, 18, 35, 0.95);
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    color: #00ffff;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+    touch-action: manipulation;
+    opacity: 0;
+    transform: scale(0.5) translateY(16px);
+    pointer-events: none;
+    transition: opacity 0.18s calc(var(--i, 1)*0.06s), transform 0.18s calc(var(--i, 1)*0.06s);
+}
+
+.float-item:hover {
+    background: rgba(0, 255, 255, 0.15);
+}
+
+#float-contact.open .float-item {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    pointer-events: all;
+}
+
+/* ==================== CUSTOM CURSOR ==================== */
+#cursor-dot,
+#cursor-ring {
+    position: fixed;
+    pointer-events: none;
+    border-radius: 50%;
+    z-index: 99998;
+    display: none;
+}
+
+#cursor-dot {
+    width: 6px;
+    height: 6px;
+    background: #00ffff;
+    transform: translate(-50%, -50%);
+}
+
+#cursor-ring {
+    width: 28px;
+    height: 28px;
+    border: 1.5px solid rgba(0, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s, border-color 0.2s;
+}
+
+body.cur-on #cursor-dot,
+body.cur-on #cursor-ring {
+    display: block;
+}
+
+body.cur-on * {
+    cursor: none !important;
+}
+
+#cursor-ring.hov {
+    width: 44px;
+    height: 44px;
+    border-color: rgba(0, 255, 255, 0.85);
+}
+
+/* ==================== PARTICLE CANVAS ==================== */
+#particle-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -9997;
+    pointer-events: none;
+    opacity: 0.35;
+}
+
+/* ==================== SKILLS SECTION ==================== */
 #skills {
     content-visibility: auto;
     contain-intrinsic-size: 0 300px;
 }
-.ThongTinThanhToan {
-    content-visibility: auto;
-    contain-intrinsic-size: 0 80px;
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 600px) {
+    .Border {
+        margin: 3px;
+        border-radius: 10px;
+    }
+
+    .BlurWebs {
+        font-size: 13px;
+    }
+
+    .Blob {
+        height: 110px;
+        width: 110px;
+    }
+
+    .NameFtDuyKhanh {
+        font-size: 18px;
+    }
+
+    .TieuSu {
+        font-size: 15px;
+    }
+
+    .MangXaHoiFtDuyKhanh div {
+        width: 88%;
+        font-size: 14px;
+        padding: 11px 14px;
+    }
+
+    .ThongTinThanhToan {
+        width: 92%;
+        padding: 14px;
+    }
+
+    .ThongTinThanhToanTitle {
+        font-size: 16px;
+    }
+
+    .ThongTinThanhToanText {
+        font-size: 13px;
+    }
+
+    .skill {
+        width: 85%;
+    }
+
+    .skill-icon {
+        font-size: 14px;
+    }
+
+    .notification {
+        padding: 22px 16px;
+        border-radius: 16px;
+    }
+
+    .notification h2 {
+        font-size: 19px;
+    }
+
+    .notification p {
+        font-size: 14px;
+    }
+
+    .button1 {
+        padding: 10px 22px;
+        font-size: 12px;
+    }
+
+    .Topnav a {
+        padding: 10px 10px;
+        font-size: 12px;
+    }
+
+    #Toast {
+        min-width: 180px;
+        margin-left: -90px;
+        font-size: 13px;
+        padding: 10px 16px;
+    }
+
+    #float-contact {
+        bottom: 16px;
+        right: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .bg-blob {
+        filter: blur(50px);
+    }
+
+    .bg-blob3 {
+        display: none;
+    }
 }
 
 @media (max-width: 380px) {
-    .Blob { height: 90px; width: 90px; }
-    .NameFtDuyKhanh { font-size: 16px; }
-    .MangXaHoiFtDuyKhanh div { width: 95%; }
-    .ThongTinThanhToan { width: 96%; }
-    .skill { width: 94%; }
+    .Blob {
+        height: 90px;
+        width: 90px;
+    }
+
+    .MangXaHoiFtDuyKhanh div {
+        width: 95%;
+    }
+
+    .ThongTinThanhToan {
+        width: 96%;
+    }
+
+    .skill {
+        width: 94%;
+    }
 }
 
 /* ==================== REDUCE MOTION ==================== */
 @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
+
+    *,
+    *::before,
+    *::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
     }
 }
 
-/* ==================== LOW-END DEVICE ==================== */
+/* ==================== REDUCE DATA ==================== */
 @media (prefers-reduced-data: reduce) {
-    .bg-blob { display: none; }
-    .TikTok, .Facebook, .Zalo, .YouTube { animation: none !important; }
-    .rainbow { animation: none !important; color: #00FFFF; }
-    .avatar-ring { animation: none !important; background: rgba(0,255,255,0.25); }
-}
+    .bg-blob {
+        display: none;
+    }
 
+    .TikTok,
+    .Facebook,
+    .Zalo,
+    .YouTube {
+        animation: none !important;
+    }
 
-
-/* ==================== SKILL ICONS ==================== */
-.skill-name { display:flex; align-items:center; justify-content:space-between; }
-.skill-icon { font-size:16px; margin-right:8px; flex-shrink:0; }
-.skill-pct { font-size:11px; font-weight:600; color:rgba(0,255,255,0.7); font-family:'Rubik',sans-serif; flex-shrink:0; margin-left:auto; padding-left:8px; }
-.skill-per::before, .skill-per::after { display:none; }
-
-/* ==================== SCROLL PROGRESS ==================== */
-#scroll-progress { position:fixed; top:0; left:0; z-index:99999; height:3px; width:0%; background:linear-gradient(90deg,#00ffff,#6c63ff,#00cc88); pointer-events:none; transition:width 0.08s linear; }
-
-
-
-/* ==================== FLOATING CONTACT ==================== */
-#float-contact { position:fixed; bottom:24px; right:18px; z-index:9000; display:flex; flex-direction:column; align-items:center; gap:9px; }
-#float-btn { width:52px; height:52px; border-radius:50%; background:linear-gradient(135deg,#00ffff,#6c63ff); border:none; cursor:pointer; color:#050510; font-size:20px; box-shadow:0 4px 20px rgba(0,255,255,0.4); transition:transform 0.25s,box-shadow 0.25s; touch-action:manipulation; }
-#float-btn:hover { transform:scale(1.1) rotate(15deg); box-shadow:0 6px 28px rgba(0,255,255,0.55); }
-.float-menu { display:flex; flex-direction:column; align-items:center; gap:8px; }
-.float-item { width:42px; height:42px; border-radius:50%; background:rgba(12,18,35,0.95); border:1px solid rgba(0,255,255,0.2); color:#00ffff; font-size:16px; display:flex; align-items:center; justify-content:center; text-decoration:none; cursor:pointer; box-shadow:0 2px 12px rgba(0,0,0,0.4); touch-action:manipulation; opacity:0; transform:scale(0.5) translateY(16px); pointer-events:none; transition:opacity 0.18s calc(var(--i,1)*0.06s),transform 0.18s calc(var(--i,1)*0.06s); }
-.float-item:hover { background:rgba(0,255,255,0.15); }
-#float-contact.open .float-item { opacity:1; transform:scale(1) translateY(0); pointer-events:all; }
-
-
-
-/* ==================== CUSTOM CURSOR ==================== */
-#cursor-dot,#cursor-ring { position:fixed; pointer-events:none; border-radius:50%; z-index:99998; display:none; }
-#cursor-dot { width:6px; height:6px; background:#00ffff; transform:translate(-50%,-50%); }
-#cursor-ring { width:28px; height:28px; border:1.5px solid rgba(0,255,255,0.5); transform:translate(-50%,-50%); transition:width 0.2s,height 0.2s,border-color 0.2s; }
-body.cur-on #cursor-dot,body.cur-on #cursor-ring { display:block; }
-body.cur-on * { cursor:none !important; }
-#cursor-ring.hov { width:44px; height:44px; border-color:rgba(0,255,255,0.85); }
-
-/* ==================== PARTICLE CANVAS ==================== */
-#particle-canvas { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-9997; pointer-events:none; opacity:0.35; }
-
-
-
-/* Responsive */
-@media (max-width:600px) {
-    .Blob{height:110px;width:110px;}
-    .skill-icon{font-size:14px;}
-    #float-contact{bottom:16px;right:14px;}
-}
-@media (max-width:380px) {
-    .Blob{height:90px;width:90px;}
-}
-@media (prefers-reduced-motion:reduce) {
-    *,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;}
-}
-@media (max-width:480px) {
-    .bg-blob{filter:blur(50px);}
-    .bg-blob3{display:none;}
-}
-
-
-
-/* Giảm blob animation trên thiết bị yếu (CPU ≤ 2 lõi) */
-@media (max-width: 480px) {
-    .bg-blob { filter: blur(50px); }
-    .bg-blob3 { display: none; }
+    .rainbow {
+        animation: none !important;
+        color: #00FFFF;
+    }
 }

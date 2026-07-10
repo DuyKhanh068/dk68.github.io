@@ -1,8 +1,8 @@
 /* ================================================
-   MAIN.JS - TỐI ƯU CHO MỌI THIẾT BỊ (kể cả yếu)
+   MAIN.JS - TỐI ƯU CHO MỌI THIẾT BỊ
    ================================================ */
 
-// -------------------- PHÁT HIỆN THIẾT BỊ YẾU --------------------
+// -------------------- PHÁT HIỆN THIẾT BỊ --------------------
 const isLowEnd = (
     navigator.hardwareConcurrency <= 2 ||
     (navigator.deviceMemory !== undefined && navigator.deviceMemory < 2) ||
@@ -46,7 +46,6 @@ function typeEffect() {
 }
 
 // -------------------- FPS COUNTER --------------------
-// Tắt FPS counter trên thiết bị yếu/mobile để tiết kiệm CPU
 let fpsElement = null;
 let fpsStart = 0;
 let fpsFrame = 0;
@@ -65,7 +64,7 @@ function fpsTick(now) {
 }
 
 // -------------------- MUSIC PLAYER --------------------
-const songList = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+const songList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
 let lastSongIndex = -1;
 
 function getRandomAudio() {
@@ -80,7 +79,7 @@ function playMusic() {
     const audio = document.getElementById("myAudio");
     if (!audio) return;
     audio.src = getRandomAudio();
-    audio.play().catch(e => console.warn('🎵 Music play failed (kiểm tra thư mục music/):', e.message));
+    audio.play().catch(e => console.warn('Music play failed:', e.message));
     audio.onended = playMusic;
 }
 
@@ -101,11 +100,7 @@ function updateDateCreated() {
     function tick() {
         const diff = Date.now() - birthDay;
         const s = Math.floor(diff / 1000);
-        const days = Math.floor(s / 86400);
-        const hours = Math.floor((s % 86400) / 3600);
-        const mins  = Math.floor((s % 3600) / 60);
-        const secs  = s % 60;
-        momk.textContent = `${days} ngày ${hours} giờ ${mins} phút ${secs} giây`;
+        momk.textContent = `${Math.floor(s / 86400)} ngày ${Math.floor((s % 86400) / 3600)} giờ ${Math.floor((s % 3600) / 60)} phút ${s % 60} giây`;
     }
 
     tick();
@@ -113,7 +108,7 @@ function updateDateCreated() {
 }
 
 // -------------------- IP & WEATHER --------------------
-let ipData = { ip:"...", isp:"...", location:"...", city:"...", lat:null, lon:null, ready:false };
+let ipData = { ip: "...", isp: "...", location: "...", city: "...", lat: null, lon: null, ready: false };
 let ipViewState = 0;
 let ipFetching = false;
 let ipElement = null;
@@ -121,14 +116,14 @@ let ipRotateTimer = null;
 
 function normalizeISP(isp) {
     if (!isp || isp === "Unknown ISP" || isp === "Network Hidden") return "Unknown ISP";
-    let c = isp.replace(/^AS\d+\s*/i,'').replace(/\s*AS\d+$/i,'').replace(/^"|"$/g,'').trim();
-    return c.length > 25 ? c.substring(0,22)+"..." : (c || "Unknown ISP");
+    let c = isp.replace(/^AS\d+\s*/i, '').replace(/\s*AS\d+$/i, '').replace(/^"|"$/g, '').trim();
+    return c.length > 25 ? c.substring(0, 22) + "..." : (c || "Unknown ISP");
 }
 
 function isValidIP(ip) {
     if (!ip || ip === "undefined" || ip === "null") return false;
     if (!/^(\d{1,3}\.){3}\d{1,3}$/.test(ip)) return false;
-    return ip.split('.').every(p => { const n=parseInt(p,10); return n>=0&&n<=255; });
+    return ip.split('.').every(p => { const n = parseInt(p, 10); return n >= 0 && n <= 255; });
 }
 
 async function checkip_address() {
@@ -140,46 +135,51 @@ async function checkip_address() {
             url: "https://ipinfo.io/json",
             parse: d => {
                 if (!isValidIP(d.ip)) throw new Error("Invalid IP");
-                const loc = d.loc ? d.loc.split(',') : [null,null];
-                return { ip:d.ip, isp:d.org||"Unknown ISP", city:d.city||"Unknown",
-                         location:`${d.city||"Unknown"}, ${d.country||"Unknown"}`,
-                         lat:parseFloat(loc[0])||null, lon:parseFloat(loc[1])||null };
+                const loc = d.loc ? d.loc.split(',') : [null, null];
+                return {
+                    ip: d.ip, isp: d.org || "Unknown ISP", city: d.city || "Unknown",
+                    location: `${d.city || "Unknown"}, ${d.country || "Unknown"}`,
+                    lat: parseFloat(loc[0]) || null, lon: parseFloat(loc[1]) || null
+                };
             }
         },
         {
             url: "https://ipwho.is/",
             parse: d => {
                 if (!d.success || !isValidIP(d.ip)) throw new Error("Not success");
-                return { ip:d.ip, isp:d.connection?.isp||d.isp||"Unknown ISP",
-                         city:d.city||"Unknown", location:`${d.city||"Unknown"}, ${d.country||"Unknown"}`,
-                         lat:d.latitude||null, lon:d.longitude||null };
+                return {
+                    ip: d.ip, isp: d.connection?.isp || d.isp || "Unknown ISP",
+                    city: d.city || "Unknown", location: `${d.city || "Unknown"}, ${d.country || "Unknown"}`,
+                    lat: d.latitude || null, lon: d.longitude || null
+                };
             }
         }
     ];
 
     for (const src of sources) {
+        const ctrl = new AbortController();
+        const t = setTimeout(() => ctrl.abort(), 5000);
         try {
-            const ctrl = new AbortController();
-            const t = setTimeout(() => ctrl.abort(), 5000);
             const res = await fetch(src.url, { signal: ctrl.signal });
-            clearTimeout(t);
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const data = await res.json();
             const parsed = src.parse(data);
             parsed.isp = normalizeISP(parsed.isp);
-            ipData = { ...ipData, ...parsed, ready:true };
+            ipData = { ...ipData, ...parsed, ready: true };
             ipFetching = false;
+            clearTimeout(t); // FIX: chuyển vào try, nhưng finally bên dưới đảm bảo luôn clear
             rotateIPInfo();
             updateWeatherData(parsed.lat, parsed.lon, parsed.city);
             return;
-        } catch(e) {}
+        } catch (e) {
+            clearTimeout(t); // FIX: clear trong catch luôn
+        }
     }
 
-    // Fallback
     ipData = {
-        ip: `192.168.${Math.floor(Math.random()*254)+1}.${Math.floor(Math.random()*254)+1}`,
-        isp:"Local Network", city:"Local", location:"Local Network",
-        lat:21.0285, lon:105.8542, ready:true
+        ip: `192.168.${Math.floor(Math.random() * 254) + 1}.${Math.floor(Math.random() * 254) + 1}`,
+        isp: "Local Network", city: "Local", location: "Local Network",
+        lat: 21.0285, lon: 105.8542, ready: true
     };
     ipFetching = false;
     rotateIPInfo();
@@ -215,7 +215,7 @@ function rotateIPInfo() {
 }
 
 // Weather
-let wData = { city:"...", temp:"--", rain_mm:0, rain_prob:0, aqi:"--", ready:false };
+let wData = { city: "...", temp: "--", rain_mm: 0, rain_prob: 0, aqi: "--", ready: false };
 let viewState = 0;
 let weatherFetching = false;
 let weatherTempEl = null;
@@ -226,8 +226,8 @@ async function updateWeatherData(customLat, customLon, customCity) {
     if (weatherFetching) return;
     weatherFetching = true;
 
-    const lat  = customLat  || ipData.lat  || 21.0285;
-    const lon  = customLon  || ipData.lon  || 105.8542;
+    const lat = customLat || ipData.lat || 21.0285;
+    const lon = customLon || ipData.lon || 105.8542;
     const city = customCity || ipData.city || "Hanoi";
     wData.city = city;
 
@@ -238,19 +238,18 @@ async function updateWeatherData(customLat, customLon, customCity) {
         `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,precipitation&hourly=precipitation_probability&timezone=auto`
     ).then(r => r.json()).then(j => {
         if (j.current) {
-            wData.temp     = Math.round(j.current.temperature_2m);
-            wData.rain_mm  = j.current.precipitation || 0;
+            wData.temp = Math.round(j.current.temperature_2m);
+            wData.rain_mm = j.current.precipitation || 0;
             if (j.hourly?.precipitation_probability) {
                 wData.rain_prob = j.hourly.precipitation_probability[new Date().getHours()] || 0;
             }
         }
-    }).catch(() => {});
+    }).catch(() => { });
 
-    // Bỏ AQI fetch trên thiết bị yếu để giảm request
     const aqiPromise = isLowEnd ? Promise.resolve() :
         fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=us_aqi`)
-        .then(r => r.json()).then(j => { if (j.current?.us_aqi !== undefined) wData.aqi = j.current.us_aqi; })
-        .catch(() => {});
+            .then(r => r.json()).then(j => { if (j.current?.us_aqi !== undefined) wData.aqi = j.current.us_aqi; })
+            .catch(() => { });
 
     await Promise.allSettled([wPromise, aqiPromise]);
 
@@ -280,7 +279,7 @@ function rotateView() {
             weatherTempEl.innerHTML = `<span style="font-weight:bold;">${Math.round(wData.temp)}°C</span>`;
             viewState = 1;
         } else if (viewState === 1) {
-            if (weatherIconEl) { weatherIconEl.className="fas fa-cloud-rain"; weatherIconEl.style.color="#3498db"; }
+            if (weatherIconEl) { weatherIconEl.className = "fas fa-cloud-rain"; weatherIconEl.style.color = "#3498db"; }
             const rain = wData.rain_mm > 0
                 ? `${parseFloat(wData.rain_mm).toFixed(1)}mm (${Math.round(wData.rain_prob)}%)`
                 : `${Math.round(wData.rain_prob)}%`;
@@ -290,12 +289,13 @@ function rotateView() {
             if (weatherIconEl) {
                 weatherIconEl.className = "fas fa-wind";
                 let color = "#27ae60";
-                if (wData.aqi > 50)  color="#f1c40f";
-                if (wData.aqi > 100) color="#e67e22";
-                if (wData.aqi > 150) color="#e74c3c";
+                if (wData.aqi > 50) color = "#f1c40f";
+                if (wData.aqi > 100) color = "#e67e22";
+                if (wData.aqi > 150) color = "#e74c3c";
                 weatherIconEl.style.color = color;
             }
-            weatherTempEl.innerHTML = `<span style="font-weight:bold;">AQI ${Math.round(wData.aqi)}</span>`;
+            // FIX: tránh hiển thị "AQI NaN" khi aqi chưa load
+            weatherTempEl.innerHTML = `<span style="font-weight:bold;">AQI ${typeof wData.aqi === 'number' ? Math.round(wData.aqi) : '--'}</span>`;
             viewState = 0;
         }
         weatherTempEl.style.opacity = 1;
@@ -311,7 +311,6 @@ function initSkillBars() {
         const target = parseInt(bar.getAttribute('per'), 10);
         if (isNaN(target)) return;
 
-        // Thiết bị yếu: set ngay không animate
         if (isLowEnd || prefersReducedMotion) {
             bar.style.width = target + '%';
             bar.setAttribute('per', target + '%');
@@ -332,7 +331,7 @@ function initSkillBars() {
             } else {
                 bar.style.width = target + '%';
                 bar.setAttribute('per', target + '%');
-                bar.style.willChange = 'auto'; // giải phóng GPU layer
+                bar.style.willChange = 'auto';
             }
         }
         requestAnimationFrame(step);
@@ -350,123 +349,70 @@ function initSkillBars() {
     }
 }
 
-// -------------------- INIT --------------------
-document.addEventListener('DOMContentLoaded', () => {
-    contentElement = document.querySelector(".contentLetter");
-    fpsElement = document.getElementById("fps");
+// -------------------- SCROLL PROGRESS (throttle bằng rAF) --------------------
+function initScrollProgress() {
+    const scrollBar = document.getElementById('scroll-progress');
+    if (!scrollBar) return;
+    let ticking = false;
 
-    // FPS counter: tắt trên mobile/thiết bị yếu
-    if (!isLowEnd && !isMobile) {
-        fpsStart = performance.now();
-        fpsRafId = requestAnimationFrame(fpsTick);
-    } else if (fpsElement) {
-        fpsElement.parentElement.style.display = 'none';
-    }
-
-    // Các tác vụ quan trọng: chạy ngay
-    checkip_address();
-    initSkillBars();
-
-    // Các tác vụ không khẩn: dùng requestIdleCallback — chạy khi browser rảnh
-    const idleFn = typeof requestIdleCallback === 'function'
-        ? requestIdleCallback
-        : fn => setTimeout(fn, 200);
-
-    idleFn(() => {
-        ShowToast();
-        setTimeout(typeEffect, 300);
-        updateDateCreated();
-
-        // Intervals: tần suất thấp hơn trên thiết bị yếu
-        const rotateInterval = isLowEnd ? 6000 : 4000;
-        setInterval(rotateIPInfo, rotateInterval);
-        setInterval(rotateView, rotateInterval);
-        setInterval(() => { if (ipData.ready) updateWeatherData(); }, 900000);
-        setInterval(() => {
-            if (ipData.ready && ipData.ip.startsWith("192.168.")) checkip_address();
-        }, 300000);
-    });
-});
-
-// -------------------- VISIBILITY: Tiết kiệm CPU khi tab ẩn --------------------
-document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-        if (fpsRafId) { cancelAnimationFrame(fpsRafId); fpsRafId = null; }
-        if (dateInterval) { clearInterval(dateInterval); dateInterval = null; }
-        if (typewriterTimer) { clearTimeout(typewriterTimer); typewriterTimer = null; }
-    } else {
-        fpsStart = performance.now();
-        fpsFrame = 0;
-        if (!fpsRafId && !isLowEnd && !isMobile) fpsRafId = requestAnimationFrame(fpsTick);
-        if (!dateInterval) updateDateCreated();
-        if (!typewriterTimer) typeEffect();
-    }
-});
-
-// -------------------- CLICK: Refresh IP --------------------
-// { passive: true } cho touch events — không block scroll thread
-document.addEventListener('click', e => {
-    if (e.target.closest('#checkip_address')) {
-        if (ipFetching) return;
-        ipData.ready = false;
-        const el = document.getElementById("checkip_address");
-        if (el) el.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> Refreshing...';
-        setTimeout(checkip_address, 400);
-    }
-}, { passive: true });
-
-// Passive listeners cho scroll/touch — tránh block main thread khi scroll
-document.addEventListener('touchstart', () => {}, { passive: true });
-document.addEventListener('touchmove',  () => {}, { passive: true });
-document.addEventListener('wheel',      () => {}, { passive: true });
-
-// ===== SCROLL PROGRESS =====
-const scrollBar = document.getElementById('scroll-progress');
-if (scrollBar) {
     document.addEventListener('scroll', () => {
-        const sc = document.documentElement.scrollTop;
-        const sh = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        scrollBar.style.width = (sh > 0 ? (sc / sh) * 100 : 0) + '%';
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                const sc = document.documentElement.scrollTop;
+                const sh = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                scrollBar.style.width = (sh > 0 ? (sc / sh) * 100 : 0) + '%';
+                ticking = false;
+            });
+            ticking = true;
+        }
     }, { passive: true });
 }
 
-// ===== CUSTOM CURSOR (desktop only) =====
+// -------------------- CUSTOM CURSOR (desktop only) --------------------
 function initCursor() {
     if (isMobile || isLowEnd) return;
     const dot = document.getElementById('cursor-dot');
     const ring = document.getElementById('cursor-ring');
     if (!dot || !ring) return;
     document.body.classList.add('cur-on');
+
     let rx = 0, ry = 0, mx = 0, my = 0;
-    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.style.left = mx + 'px'; dot.style.top = my + 'px'; }, { passive: true });
+    document.addEventListener('mousemove', e => {
+        mx = e.clientX; my = e.clientY;
+        dot.style.left = mx + 'px';
+        dot.style.top = my + 'px';
+    }, { passive: true });
+
     (function lerp() {
-        rx += (mx - rx) * 0.13; ry += (my - ry) * 0.13;
-        ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+        rx += (mx - rx) * 0.13;
+        ry += (my - ry) * 0.13;
+        ring.style.left = rx + 'px';
+        ring.style.top = ry + 'px';
         requestAnimationFrame(lerp);
     })();
+
     document.querySelectorAll('a,button,[onclick],.stat-item,.ThongTinThanhToan').forEach(el => {
         el.addEventListener('mouseenter', () => ring.classList.add('hov'), { passive: true });
         el.addEventListener('mouseleave', () => ring.classList.remove('hov'), { passive: true });
     });
 }
 
-// ===== FLOATING CONTACT =====
+// -------------------- FLOATING CONTACT --------------------
 function initFloat() {
     const fc = document.getElementById('float-contact');
     const btn = document.getElementById('float-btn');
     const icon = document.getElementById('float-icon');
-
     if (!fc || !btn) return;
 
     btn.addEventListener('click', () => {
         fc.classList.toggle('open');
         if (icon) icon.className = fc.classList.contains('open') ? 'fas fa-times' : 'fas fa-comments';
     }, { passive: true });
-
-
 }
 
-// ===== PARTICLE SYSTEM (desktop only, lightweight) =====
+// -------------------- PARTICLE SYSTEM (desktop only) --------------------
+let particleRafId = null;
+
 function initParticles() {
     if (isMobile || isLowEnd) return;
     const canvas = document.getElementById('particle-canvas');
@@ -476,7 +422,7 @@ function initParticles() {
     let W, H, pts;
 
     function resize() {
-        W = canvas.width  = window.innerWidth;
+        W = canvas.width = window.innerWidth;
         H = canvas.height = window.innerHeight;
     }
     resize();
@@ -489,9 +435,11 @@ function initParticles() {
     }));
 
     const MAX_DIST = 130;
+
     function draw() {
         ctx.clearRect(0, 0, W, H);
-        pts.forEach(p => {
+        for (let i = 0; i < COUNT; i++) {
+            const p = pts[i];
             p.x += p.vx; p.y += p.vy;
             if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
             if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
@@ -499,7 +447,7 @@ function initParticles() {
             ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
             ctx.fillStyle = 'rgba(0,255,255,0.7)';
             ctx.fill();
-        });
+        }
         for (let i = 0; i < COUNT; i++) {
             for (let j = i + 1; j < COUNT; j++) {
                 const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
@@ -514,14 +462,19 @@ function initParticles() {
                 }
             }
         }
-        requestAnimationFrame(draw);
+        particleRafId = requestAnimationFrame(draw);
     }
+
     draw();
 }
 
-// ===== ADAPTIVE PERFORMANCE MONITOR =====
+// -------------------- ADAPTIVE PERFORMANCE MONITOR --------------------
+let adaptiveRafId = null;
+
 function initAdaptivePerf() {
-    if (prefersReducedMotion) return;
+    // FIX: bỏ luôn trên thiết bị yếu — đã biết yếu thì không cần monitor nữa
+    if (prefersReducedMotion || isLowEnd) return;
+
     const FPS_HISTORY = [];
     let lastCheck = performance.now(), frames = 0;
 
@@ -533,25 +486,104 @@ function initAdaptivePerf() {
             if (FPS_HISTORY.length > 5) FPS_HISTORY.shift();
             const avg = FPS_HISTORY.reduce((a, b) => a + b, 0) / FPS_HISTORY.length;
             if (avg < 25) {
-                // Tắt blob animation khi FPS thấp
                 document.querySelectorAll('.bg-blob').forEach(b => b.style.animationPlayState = 'paused');
                 document.getElementById('particle-canvas')?.style.setProperty('display', 'none');
+                stopParticles();
             } else if (avg > 45) {
                 document.querySelectorAll('.bg-blob').forEach(b => b.style.animationPlayState = 'running');
             }
-            lastCheck = now; frames = 0;
+            lastCheck = now;
+            frames = 0;
         }
-        requestAnimationFrame(check);
+        adaptiveRafId = requestAnimationFrame(check);
     }
-    requestAnimationFrame(check);
+
+    adaptiveRafId = requestAnimationFrame(check);
 }
 
-// ===== RUN ALL NEW FEATURES =====
+function stopParticles() {
+    if (particleRafId) { cancelAnimationFrame(particleRafId); particleRafId = null; }
+}
+
+function stopAdaptivePerf() {
+    if (adaptiveRafId) { cancelAnimationFrame(adaptiveRafId); adaptiveRafId = null; }
+}
+
+// -------------------- CLICK: REFRESH IP --------------------
+// FIX: bỏ passive:true — click không hỗ trợ passive, gây hiểu lẫn
+document.addEventListener('click', e => {
+    if (e.target.closest('#checkip_address')) {
+        if (ipFetching) return;
+        ipData.ready = false;
+        const el = document.getElementById("checkip_address");
+        if (el) el.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> Refreshing...';
+        setTimeout(checkip_address, 400);
+    }
+});
+
+// ĐÃ XÓA: 3 empty passive listeners (touchstart, touchmove, wheel) — không làm gì cả
+
+// -------------------- VISIBILITY: Tiết kiệm CPU khi tab ẩn --------------------
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        if (fpsRafId) { cancelAnimationFrame(fpsRafId); fpsRafId = null; }
+        if (dateInterval) { clearInterval(dateInterval); dateInterval = null; }
+        if (typewriterTimer) { clearTimeout(typewriterTimer); typewriterTimer = null; }
+        // FIX: thêm pause cho particle + adaptive perf khi tab ẩn
+        stopParticles();
+        stopAdaptivePerf();
+    } else {
+        fpsStart = performance.now();
+        fpsFrame = 0;
+        if (!fpsRafId && !isLowEnd && !isMobile) fpsRafId = requestAnimationFrame(fpsTick);
+        if (!dateInterval) updateDateCreated();
+        if (!typewriterTimer) typeEffect();
+        // FIX: resume particle + adaptive perf khi tab hiện lại
+        if (!particleRafId && !isMobile && !isLowEnd) initParticles();
+        if (!adaptiveRafId && !prefersReducedMotion && !isLowEnd) initAdaptivePerf();
+    }
+});
+
+// -------------------- INIT (gộp 2 DOMContentLoaded thành 1) --------------------
 document.addEventListener('DOMContentLoaded', () => {
+    contentElement = document.querySelector(".contentLetter");
+    fpsElement = document.getElementById("fps");
+
+    // FPS counter: tắt trên mobile/thiết bị yếu
+    if (!isLowEnd && !isMobile) {
+        fpsStart = performance.now();
+        fpsRafId = requestAnimationFrame(fpsTick);
+    } else if (fpsElement) {
+        fpsElement.parentElement.style.display = 'none';
+    }
+
+    // Tác vụ quan trọng: chạy ngay
+    checkip_address();
+    initSkillBars();
+    initScrollProgress();
     initCursor();
     initFloat();
-    initAdaptivePerf();
-    // Particles chạy sau idle để không ảnh hưởng load
-    const idle = typeof requestIdleCallback === 'function' ? requestIdleCallback : f => setTimeout(f, 500);
-    idle(initParticles);
-}, { once: true });
+
+    // Tác vụ không khẩn: chạy khi browser rảnh
+    const idleFn = typeof requestIdleCallback === 'function'
+        ? requestIdleCallback
+        : fn => setTimeout(fn, 200);
+
+    idleFn(() => {
+        ShowToast();
+        setTimeout(typeEffect, 300);
+        updateDateCreated();
+        initAdaptivePerf();
+
+        const rotateInterval = isLowEnd ? 6000 : 4000;
+        setInterval(rotateIPInfo, rotateInterval);
+        setInterval(rotateView, rotateInterval);
+        setInterval(() => { if (ipData.ready) updateWeatherData(); }, 900000);
+        setInterval(() => {
+            if (ipData.ready && ipData.ip.startsWith("192.168.")) checkip_address();
+        }, 300000);
+
+        // Particles chạy sau idle
+        initParticles();
+    });
+});
