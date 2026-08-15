@@ -1,0 +1,26 @@
+{
+  "name": "dk68-github-io",
+  "version": "1.0.0",
+  "description": "DuyKhanh's personal website",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DuyKhanh068/dk68.github.io.git"
+  },
+  "keywords": [
+    "portfolio",
+    "profile"
+  ],
+  "author": "DuyKhanh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DuyKhanh068/dk68.github.io/issues"
+  },
+  "homepage": "https://github.com/DuyKhanh068/dk68.github.io#readme",
+  "dependencies": {
+    "@vercel/speed-insights": "^2.0.0"
+  }
+}
